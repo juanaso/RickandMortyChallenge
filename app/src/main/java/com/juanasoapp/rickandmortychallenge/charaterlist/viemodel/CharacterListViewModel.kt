@@ -35,4 +35,9 @@ class CharacterListViewModel @Inject constructor(val repository: CharacterListRe
             }
         }
     }
+
+    fun onTextSet(s: String) {
+        currentQuery = s
+        loadCharacters()
+    }
 }

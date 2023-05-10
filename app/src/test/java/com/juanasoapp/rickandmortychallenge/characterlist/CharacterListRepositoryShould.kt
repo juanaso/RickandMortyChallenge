@@ -28,7 +28,7 @@ class CharacterListRepositoryShould:BaseUnitTest() {
     fun getCharacterListFromService() = runBlockingTest {
         val repository =  CharacterListRepository(service)
         repository.getCharacters(1,"")
-        verify(service, times(1)).fetchCharacters(any())
+        verify(service, times(1)).fetchCharacters(any(), any())
     }
 
     @ExperimentalCoroutinesApi
@@ -40,11 +40,12 @@ class CharacterListRepositoryShould:BaseUnitTest() {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun passCurrentPageIntoService() = runBlockingTest {
+    fun passCurrentPageAndCurrentCurrentQueryIntoService() = runBlockingTest {
         val currentPage = 2
+        val currentQuery = "test"
         val repository = mockSuccessfulCase()
-        repository.getCharacters(currentPage,"").first().exceptionOrNull()
-        verify(service).fetchCharacters(currentPage)
+        repository.getCharacters(currentPage,currentQuery).first().exceptionOrNull()
+        verify(service).fetchCharacters(currentPage,currentQuery)
     }
 
     @ExperimentalCoroutinesApi
@@ -57,7 +58,7 @@ class CharacterListRepositoryShould:BaseUnitTest() {
 
     private fun mockFailureCase(): CharacterListRepository {
         runBlocking {
-            whenever(service.fetchCharacters(any())).thenReturn(
+            whenever(service.fetchCharacters(any(), any())).thenReturn(
                 flow { emit(Result.failure<CharacterResponse>(exception)) }
             )
         }
@@ -66,7 +67,7 @@ class CharacterListRepositoryShould:BaseUnitTest() {
 
     private fun mockSuccessfulCase(): CharacterListRepository {
         runBlocking {
-            whenever(service.fetchCharacters(any())).thenReturn(
+            whenever(service.fetchCharacters(any(), any())).thenReturn(
                 flow { emit(Result.success(characterResponse)) }
             )
         }

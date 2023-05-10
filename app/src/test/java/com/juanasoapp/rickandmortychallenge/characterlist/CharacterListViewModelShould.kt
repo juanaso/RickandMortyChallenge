@@ -6,7 +6,6 @@ import com.juanasoapp.rickandmortychallenge.charaterlist.model.Info
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.RAMCharacter
 import com.juanasoapp.rickandmortychallenge.charaterlist.viemodel.CharacterListViewModel
 import com.juanasoapp.rickandmortychallenge.utils.BaseUnitTest
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
@@ -81,7 +80,6 @@ class CharacterListViewModelShould : BaseUnitTest() {
         viewModel.currentPage = currentPage
         viewModel.currentQuery = currentQuery
         viewModel.loadCharacters()
-//        repository.getCharacters(currentPage).first().exceptionOrNull()
         verify(repository).getCharacters(currentPage,currentQuery)
     }
 

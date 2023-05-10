@@ -21,20 +21,21 @@ class CharacterListServiceShould:BaseUnitTest() {
     private val characterResponse = mock<CharacterResponse>()
     private lateinit var service: CharacterListService
     val currentPage = 2
+    val currentQuery = "test"
 
     @ExperimentalCoroutinesApi
     @Test
     fun getCharacterListFromApi() = runBlockingTest {
         mockSuccessCase()
-        service.fetchCharacters(currentPage).first()
-        verify(api, times(1)).fetchCharacters(currentPage)
+        service.fetchCharacters(currentPage,currentQuery).first()
+        verify(api, times(1)).fetchCharacters(currentPage,currentQuery)
     }
 
     @ExperimentalCoroutinesApi
     @Test
     fun convertValuesToFlowResultAndEmitsThem() = runBlockingTest {
         mockSuccessCase()
-        Assert.assertEquals(Result.success(characterResponse), service.fetchCharacters(1).first())
+        Assert.assertEquals(Result.success(characterResponse), service.fetchCharacters(1,"").first())
     }
 
     @ExperimentalCoroutinesApi
@@ -44,25 +45,25 @@ class CharacterListServiceShould:BaseUnitTest() {
 
         Assert.assertEquals(
             errorMessage,
-            service.fetchCharacters(currentPage).first().exceptionOrNull()?.message
+            service.fetchCharacters(currentPage,"").first().exceptionOrNull()?.message
         )
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun passCurrentPageIntoApi() = runBlockingTest {
+    fun passCurrentPageAndCurrentQueryIntoApi() = runBlockingTest {
         mockSuccessCase()
-        service.fetchCharacters(currentPage).first().exceptionOrNull()
-        verify(api).fetchCharacters(currentPage)
+        service.fetchCharacters(currentPage,currentQuery).first().exceptionOrNull()
+        verify(api).fetchCharacters(currentPage,currentQuery)
     }
 
     private suspend fun mockSuccessCase() {
-        whenever(api.fetchCharacters(any())).thenReturn(characterResponse)
+        whenever(api.fetchCharacters(any(), any())).thenReturn(characterResponse)
         service = CharacterListService(api)
     }
 
     private suspend fun mockFailureCase() {
-        whenever(api.fetchCharacters(any())).thenThrow(RuntimeException(backendExceptionErrorMessage))
+        whenever(api.fetchCharacters(any(), any())).thenThrow(RuntimeException(backendExceptionErrorMessage))
         service = CharacterListService(api)
     }
 }

@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class CharacterListRepository @Inject constructor(val service: CharacterListService) {
     fun getCharacters(currentPage: Int = 1, currentQuery: String): Flow<Result<CharacterResponse>> {
-        return service.fetchCharacters(currentPage)
+        return service.fetchCharacters(currentPage,currentQuery)
     }
 }

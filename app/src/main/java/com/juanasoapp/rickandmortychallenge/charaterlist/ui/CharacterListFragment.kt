@@ -78,13 +78,13 @@ class CharacterListFragment : Fragment() {
 
         binding.homeCharacterSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-//                viewModel.onTextSet(query ?: "")
+                viewModel.onTextSet(query ?: "")
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText?.isNotEmpty() == true) {
-//                    viewModel.onTextSet(newText)
+                    viewModel.onTextSet(newText)
                 }
                 return false
             }
