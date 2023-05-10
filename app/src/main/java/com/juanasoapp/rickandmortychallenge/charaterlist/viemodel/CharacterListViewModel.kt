@@ -25,7 +25,12 @@ class CharacterListViewModel @Inject constructor(val repository: CharacterListRe
                     if (it.isSuccess) {
                         val response = it.getOrNull()
                         response?.let {
-                            characters.value = (response.results)
+                            val existingCharacters = characters.value ?: ArrayList()
+                            response.results.let {results->
+                                (existingCharacters as ArrayList).addAll(results)
+                            }
+                            characters.value = existingCharacters
+
                             if (response.info.next == null) {
                                 allDataLoaded = true
                             } else {

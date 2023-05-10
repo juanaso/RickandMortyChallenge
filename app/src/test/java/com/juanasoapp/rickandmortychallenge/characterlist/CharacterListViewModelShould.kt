@@ -3,9 +3,11 @@ package com.juanasoapp.rickandmortychallenge.characterlist
 import com.juanasoapp.rickandmortychallenge.charaterlist.api.CharacterListRepository
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.CharacterResponse
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.Info
+import com.juanasoapp.rickandmortychallenge.charaterlist.model.Location
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.RAMCharacter
 import com.juanasoapp.rickandmortychallenge.charaterlist.viemodel.CharacterListViewModel
 import com.juanasoapp.rickandmortychallenge.utils.BaseUnitTest
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
@@ -25,7 +27,12 @@ class CharacterListViewModelShould : BaseUnitTest() {
     private var repository: CharacterListRepository = mock()
     private val characterResponse = mock<CharacterResponse>()
     private val ramCharacters = mock<List<RAMCharacter>>()
-    private val ramCharactersWith2 = listOf(mock<RAMCharacter>(), mock<RAMCharacter>())
+    var dummyCharacter1 = mock<RAMCharacter>()
+    var dummyCharacter2 = mock<RAMCharacter>()
+    var dummyCharacter3 = mock<RAMCharacter>()
+    var dummyCharacter4 = mock<RAMCharacter>()
+    private val ramCharactersWith2 = listOf(dummyCharacter1, dummyCharacter2)
+    private val ramCharactersWith22 = listOf(dummyCharacter3, dummyCharacter4)
     private val info = mock<Info>()
     private val expected = Result.success(characterResponse)
     private val exception = RuntimeException("Something went wrong")
@@ -35,15 +42,15 @@ class CharacterListViewModelShould : BaseUnitTest() {
     fun getCharacterListFromRepository() = runBlockingTest {
         val viewModel = mockSuccessfulCase()
         viewModel.loadCharacters()
-        verify(repository, times(1)).getCharacters(1,"")
+        verify(repository, times(1)).getCharacters(1, "")
     }
 
     @ExperimentalCoroutinesApi
     @Test
     fun emitsAllWordsListFromRepository() = runBlockingTest {
-        val viewModel = mockSuccessfulCase()
+        val viewModel = mockSuccessfulCaseWith2()
         viewModel.loadCharacters()
-        assertEquals(ramCharacters, viewModel.characters.value)
+        assertEquals(ramCharactersWith2, viewModel.characters.value)
     }
 
     @ExperimentalCoroutinesApi
@@ -57,7 +64,7 @@ class CharacterListViewModelShould : BaseUnitTest() {
     @ExperimentalCoroutinesApi
     @Test
     fun increasePageAfterSuccessfulCalling() {
-        val viewModel = mockSuccessfulCase()
+        val viewModel = mockSuccessfulCaseWith2()
         viewModel.loadCharacters()
         assertEquals(2, viewModel.currentPage)
     }
@@ -65,11 +72,11 @@ class CharacterListViewModelShould : BaseUnitTest() {
     @ExperimentalCoroutinesApi
     @Test
     fun notCallGetCharactersWhenAllDataLoaded() {
-        mockSuccessfulCase(null)
+        mockSuccessfulCaseWith2(null)
         val viewModel = CharacterListViewModel(repository)
         viewModel.loadCharacters()
         viewModel.loadCharacters()
-        verify(repository, times(1)).getCharacters(1,"")
+        verify(repository, times(1)).getCharacters(1, "")
     }
 
     @ExperimentalCoroutinesApi
@@ -81,7 +88,7 @@ class CharacterListViewModelShould : BaseUnitTest() {
         viewModel.currentPage = currentPage
         viewModel.currentQuery = currentQuery
         viewModel.loadCharacters()
-        verify(repository).getCharacters(currentPage,currentQuery)
+        verify(repository).getCharacters(currentPage, currentQuery)
     }
 
     @ExperimentalCoroutinesApi
@@ -89,6 +96,7 @@ class CharacterListViewModelShould : BaseUnitTest() {
     fun emptySeriesListOnSetQueryTest() = runBlockingTest {
         val viewModel = mockSuccessfulCaseWith2()
         viewModel.loadCharacters()
+        whenever(characterResponse.results).thenReturn(emptyList())
         viewModel.onTextSet("testString")
         assertEquals(0, viewModel.characters.value?.size)
     }
@@ -98,23 +106,23 @@ class CharacterListViewModelShould : BaseUnitTest() {
     fun increaseAmountOfCharacterWhenSecondLoad() = runBlockingTest {
         val viewModel = mockSuccessfulCaseWith2()
         viewModel.loadCharacters()
-        viewModel.currentPage = 2
+//        whenever(characterResponse.results).thenReturn(ramCharactersWith22)
         viewModel.loadCharacters()
         assertEquals(4, viewModel.characters.value?.size)
     }
 
-        private fun mockFailureCase(): CharacterListViewModel {
-            runBlocking {
-                whenever(repository.getCharacters(1,"")).thenReturn(
-                    flow { emit(Result.failure<CharacterResponse>(exception)) }
-                )
-            }
-            return CharacterListViewModel(repository)
+    private fun mockFailureCase(): CharacterListViewModel {
+        runBlocking {
+            whenever(repository.getCharacters(1, "")).thenReturn(
+                flow { emit(Result.failure<CharacterResponse>(exception)) }
+            )
         }
+        return CharacterListViewModel(repository)
+    }
 
     private fun mockSuccessfulCase(next: String? = ""): CharacterListViewModel {
         repository = mock<CharacterListRepository> {
-            onBlocking { getCharacters(1,"") } doReturn flowOf(
+            onBlocking { getCharacters(1, "") } doReturn flowOf(
                 Result.success(
                     characterResponse
                 )
@@ -125,9 +133,24 @@ class CharacterListViewModelShould : BaseUnitTest() {
         whenever(info.next).thenReturn(next)
         return CharacterListViewModel(repository)
     }
+
+    private fun mockSuccessfulCaseDummyData(next: String? = "",amountOfItems: Int): CharacterListViewModel {
+        repository = mock<CharacterListRepository> {
+            onBlocking { getCharacters(any(), any()) } doReturn flowOf(
+                Result.success(
+                    characterResponse
+                )
+            )
+        }
+        whenever(characterResponse.results).thenReturn(getListOfDummyRAMCharacters(amountOfItems))
+        whenever(expected.getOrNull()?.info).thenReturn(info)
+        whenever(info.next).thenReturn(next)
+        return CharacterListViewModel(repository)
+    }
+
     private fun mockSuccessfulCaseWith2(next: String? = ""): CharacterListViewModel {
         repository = mock<CharacterListRepository> {
-            onBlocking { getCharacters(1,"") } doReturn flowOf(
+            onBlocking { getCharacters(any(), any()) } doReturn flowOf(
                 Result.success(
                     characterResponse
                 )
@@ -137,5 +160,13 @@ class CharacterListViewModelShould : BaseUnitTest() {
         whenever(expected.getOrNull()?.info).thenReturn(info)
         whenever(info.next).thenReturn(next)
         return CharacterListViewModel(repository)
+    }
+
+    fun getListOfDummyRAMCharacters(amountOfItems: Int): List<RAMCharacter> {
+        val ramCharacters = ArrayList<RAMCharacter>()
+        for (i in 0 until amountOfItems) {
+            ramCharacters.add(RAMCharacter(i, "", "", "", "", "", Location("", ""), Location("", ""), "", listOf(), "", ""))
+        }
+        return ramCharacters
     }
 }
