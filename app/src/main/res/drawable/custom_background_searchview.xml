@@ -9,7 +9,7 @@
         android:topRightRadius="20dp"/>
 
     <stroke
-        android:color="@android:color/darker_gray"
+        android:color="@color/ic_rick_background"
         android:width="6dp"/>
 
 </shape>

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
@@ -45,6 +46,7 @@ class CharacterListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpAdapter()
         setUpObservers()
+        setUpSearchView()
         viewModel.loadCharacters()
     }
 
@@ -67,6 +69,27 @@ class CharacterListFragment : Fragment() {
         binding.homeCharacterRecycler.adapter = genericAdapter
     }
 
+
+
+    private fun setUpSearchView() {
+        binding.homeCharacterSearchView.setOnClickListener {
+            (it as SearchView).isIconified = false
+        }
+
+        binding.homeCharacterSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+//                viewModel.onTextSet(query ?: "")
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText?.isNotEmpty() == true) {
+//                    viewModel.onTextSet(newText)
+                }
+                return false
+            }
+        })
+    }
     private fun setUpObservers() {
         viewModel.characters.observe(this as LifecycleOwner) { response ->
             response.let {
