@@ -2,6 +2,7 @@ package com.juanasoapp.rickandmortychallenge.characterlist
 
 import com.juanasoapp.rickandmortychallenge.charaterlist.api.CharacterListRepository
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.CharacterResponse
+import com.juanasoapp.rickandmortychallenge.charaterlist.model.Info
 import com.juanasoapp.rickandmortychallenge.charaterlist.viemodel.CharacterListViewModel
 import com.juanasoapp.rickandmortychallenge.utils.BaseUnitTest
 import com.juanasoapp.rickandmortychallenge.utils.getValueForTest
@@ -14,12 +15,14 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import com.nhaarman.mockitokotlin2.verify
+import junit.framework.Assert.assertEquals
 import junit.framework.TestCase
 
 class CharacterListViewModelShould : BaseUnitTest() {
 
     private val repository: CharacterListRepository = mock()
     private val characterResponse = mock<CharacterResponse>()
+    private val info = mock<Info>()
     private val expected = Result.success(characterResponse)
     private val exception = RuntimeException("Something went wrong")
 
@@ -35,16 +38,31 @@ class CharacterListViewModelShould : BaseUnitTest() {
     @Test
     fun emitsAllWordsListFromRepository() = runBlockingTest {
         val viewModel = mockSuccessfulCase()
-        TestCase.assertEquals(expected, viewModel.characters.getValueForTest())
+        assertEquals(expected, viewModel.characters.getValueForTest())
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun emitErrorWhenReceiveError()=runBlockingTest {
+    fun emitErrorWhenReceiveError() = runBlockingTest {
         val viewModel = mockFailureCase()
-        TestCase.assertEquals(exception, viewModel.characters.getValueForTest()!!.exceptionOrNull())
+        assertEquals(exception, viewModel.characters.getValueForTest()!!.exceptionOrNull())
     }
 
+    @ExperimentalCoroutinesApi
+    @Test
+    fun increasePageAfterSuccessfulCalling() {
+        whenever(repository.getCharacters()).thenReturn(
+            flow {
+                emit(expected)
+            }
+        )
+        whenever(expected.getOrNull()?.info).thenReturn(info)
+        whenever(info.next).thenReturn("")
+
+        val viewModel = CharacterListViewModel(repository)
+        viewModel.characters.getValueForTest()
+        assertEquals(2, viewModel.currentPage)
+    }
 
     private fun mockFailureCase(): CharacterListViewModel {
         runBlocking {
@@ -65,5 +83,4 @@ class CharacterListViewModelShould : BaseUnitTest() {
         }
         return CharacterListViewModel(repository)
     }
-
 }
