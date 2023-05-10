@@ -6,7 +6,6 @@ import com.juanasoapp.rickandmortychallenge.charaterlist.model.Info
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.RAMCharacter
 import com.juanasoapp.rickandmortychallenge.charaterlist.viemodel.CharacterListViewModel
 import com.juanasoapp.rickandmortychallenge.utils.BaseUnitTest
-import com.juanasoapp.rickandmortychallenge.utils.getValueForTest
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -20,7 +19,6 @@ import org.junit.Test
 import com.nhaarman.mockitokotlin2.verify
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 
 class CharacterListViewModelShould : BaseUnitTest() {
@@ -37,7 +35,7 @@ class CharacterListViewModelShould : BaseUnitTest() {
     fun getCharacterListFromRepository() = runBlockingTest {
         val viewModel = mockSuccessfulCase()
         viewModel.loadCharacters()
-        verify(repository, times(1)).getCharacters()
+        verify(repository, times(1)).getCharacters(1,"")
     }
 
     @ExperimentalCoroutinesApi
@@ -71,12 +69,25 @@ class CharacterListViewModelShould : BaseUnitTest() {
         val viewModel = CharacterListViewModel(repository)
         viewModel.loadCharacters()
         viewModel.loadCharacters()
-        verify(repository, times(1)).getCharacters()
+        verify(repository, times(1)).getCharacters(1,"")
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun passCurrentQueryIntoService() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+        val currentPage = 2
+        val currentQuery = "test"
+        viewModel.currentPage = currentPage
+        viewModel.currentQuery = currentQuery
+        viewModel.loadCharacters()
+//        repository.getCharacters(currentPage).first().exceptionOrNull()
+        verify(repository).getCharacters(currentPage,currentQuery)
     }
 
     private fun mockFailureCase(): CharacterListViewModel {
         runBlocking {
-            whenever(repository.getCharacters()).thenReturn(
+            whenever(repository.getCharacters(1,"")).thenReturn(
                 flow { emit(Result.failure<CharacterResponse>(exception)) }
             )
         }
@@ -85,7 +96,7 @@ class CharacterListViewModelShould : BaseUnitTest() {
 
     private fun mockSuccessfulCase(next: String? = ""): CharacterListViewModel {
         repository = mock<CharacterListRepository> {
-            onBlocking { getCharacters(any()) } doReturn flowOf(
+            onBlocking { getCharacters(1,"") } doReturn flowOf(
                 Result.success(
                     characterResponse
                 )
