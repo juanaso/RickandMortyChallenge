@@ -4,6 +4,7 @@ import com.juanasoapp.rickandmortychallenge.charaterlist.api.CharacterListReposi
 import com.juanasoapp.rickandmortychallenge.charaterlist.api.CharacterListService
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.CharacterResponse
 import com.juanasoapp.rickandmortychallenge.utils.BaseUnitTest
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -26,8 +27,8 @@ class CharacterListRepositoryShould:BaseUnitTest() {
     @Test
     fun getCharacterListFromService() = runBlockingTest {
         val repository =  CharacterListRepository(service)
-        repository.getCharacters()
-        verify(service, times(1)).fetchCharacters()
+        repository.getCharacters(1)
+        verify(service, times(1)).fetchCharacters(any())
     }
 
     @ExperimentalCoroutinesApi
@@ -35,6 +36,15 @@ class CharacterListRepositoryShould:BaseUnitTest() {
     fun emitsCharacterFromService() = runBlockingTest {
         val repository = mockSuccessfulCase()
         Assert.assertEquals(characterResponse, repository.getCharacters().first().getOrNull())
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun passCurrentPageIntoService() = runBlockingTest {
+        val currentPage = 2
+        val repository = mockSuccessfulCase()
+        repository.getCharacters(currentPage).first().exceptionOrNull()
+        verify(service).fetchCharacters(currentPage)
     }
 
     @ExperimentalCoroutinesApi
@@ -47,7 +57,7 @@ class CharacterListRepositoryShould:BaseUnitTest() {
 
     private fun mockFailureCase(): CharacterListRepository {
         runBlocking {
-            whenever(service.fetchCharacters()).thenReturn(
+            whenever(service.fetchCharacters(any())).thenReturn(
                 flow { emit(Result.failure<CharacterResponse>(exception)) }
             )
         }
@@ -56,7 +66,7 @@ class CharacterListRepositoryShould:BaseUnitTest() {
 
     private fun mockSuccessfulCase(): CharacterListRepository {
         runBlocking {
-            whenever(service.fetchCharacters()).thenReturn(
+            whenever(service.fetchCharacters(any())).thenReturn(
                 flow { emit(Result.success(characterResponse)) }
             )
         }

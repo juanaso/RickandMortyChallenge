@@ -8,11 +8,11 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.juanasoapp.rickandmortychallenge.R
 
-abstract class GenericAdapter<T>(var listItems: List<T>, var layoutId: Int) :
+abstract class GenericAdapter<T>(var listItems: ArrayList<T>, var layoutId: Int, var minimumAmountToReload: Int = 5) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    fun setItems(listItems: List<T>) {
-        this.listItems = listItems
+    fun setItems(listItems: ArrayList<T>) {
+        this.listItems.addAll(listItems)
         notifyDataSetChanged()
     }
 
@@ -24,6 +24,9 @@ abstract class GenericAdapter<T>(var listItems: List<T>, var layoutId: Int) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as Binder<T>).bind(listItems[position])
+        if (position == listItems.size - minimumAmountToReload){
+            onLoadMoreItems()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -34,6 +37,8 @@ abstract class GenericAdapter<T>(var listItems: List<T>, var layoutId: Int) :
         return layoutId
     }
 
+    abstract fun onLoadMoreItems()
+
     abstract fun getViewHolder(
         viewDataBinding: ViewDataBinding
     ): RecyclerView.ViewHolder
@@ -42,3 +47,4 @@ abstract class GenericAdapter<T>(var listItems: List<T>, var layoutId: Int) :
         fun bind(data: T)
     }
 }
+

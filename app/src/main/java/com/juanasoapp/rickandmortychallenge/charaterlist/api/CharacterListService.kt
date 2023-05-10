@@ -11,9 +11,9 @@ import javax.inject.Inject
 class CharacterListService @Inject constructor(var api: RickAndMortyAPI) {
     private val errorMessage = "Something went wrong"
 
-    fun fetchCharacters(): Flow<Result<CharacterResponse>> {
+    fun fetchCharacters(currentPage: Int): Flow<Result<CharacterResponse>> {
         return flow {
-            emit(Result.success(api.fetchCharacters()))
+            emit(Result.success(api.fetchCharacters(currentPage)))
         }.catch {
             emit(Result.failure(RuntimeException(errorMessage)))
         }

@@ -52,7 +52,11 @@ class CharacterListFragment : Fragment() {
         val staggeredGridLayoutManager =
             StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL)
 
-        genericAdapter = object : GenericAdapter<Any>(emptyList(), R.layout.character_list_item) {
+        genericAdapter = object : GenericAdapter<Any>(arrayListOf(), R.layout.character_list_item) {
+
+            override fun onLoadMoreItems() {
+                viewModel.loadCharacters()
+            }
 
             override fun getViewHolder(viewDataBinding: ViewDataBinding): RecyclerView.ViewHolder {
                 return CharacterViewHolder(viewDataBinding as CharacterListItemBinding)
@@ -66,7 +70,7 @@ class CharacterListFragment : Fragment() {
     private fun setUpObservers() {
         viewModel.characters.observe(this as LifecycleOwner) { response ->
             response.let {
-                (genericAdapter as GenericAdapter<Any>).setItems(it)
+                (genericAdapter as GenericAdapter<Any>).setItems(ArrayList(it))
             }
         }
     }

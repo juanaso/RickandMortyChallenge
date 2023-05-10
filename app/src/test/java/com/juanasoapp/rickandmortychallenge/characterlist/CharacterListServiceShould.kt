@@ -4,6 +4,7 @@ import com.juanasoapp.rickandmortychallenge.api.RickAndMortyAPI
 import com.juanasoapp.rickandmortychallenge.charaterlist.api.CharacterListService
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.CharacterResponse
 import com.juanasoapp.rickandmortychallenge.utils.BaseUnitTest
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -19,20 +20,21 @@ class CharacterListServiceShould:BaseUnitTest() {
     val api: RickAndMortyAPI = mock()
     private val characterResponse = mock<CharacterResponse>()
     private lateinit var service: CharacterListService
+    val currentPage = 2
 
     @ExperimentalCoroutinesApi
     @Test
     fun getCharacterListFromApi() = runBlockingTest {
-        service = CharacterListService(api)
-        service.fetchCharacters().first()
-        verify(api, times(1)).fetchCharacters()
+        mockSuccessCase()
+        service.fetchCharacters(currentPage).first()
+        verify(api, times(1)).fetchCharacters(currentPage)
     }
 
     @ExperimentalCoroutinesApi
     @Test
     fun convertValuesToFlowResultAndEmitsThem() = runBlockingTest {
         mockSuccessCase()
-        Assert.assertEquals(Result.success(characterResponse), service.fetchCharacters().first())
+        Assert.assertEquals(Result.success(characterResponse), service.fetchCharacters(1).first())
     }
 
     @ExperimentalCoroutinesApi
@@ -42,17 +44,25 @@ class CharacterListServiceShould:BaseUnitTest() {
 
         Assert.assertEquals(
             errorMessage,
-            service.fetchCharacters().first().exceptionOrNull()?.message
+            service.fetchCharacters(currentPage).first().exceptionOrNull()?.message
         )
     }
 
+    @ExperimentalCoroutinesApi
+    @Test
+    fun passCurrentPageIntoApi() = runBlockingTest {
+        mockSuccessCase()
+        service.fetchCharacters(currentPage).first().exceptionOrNull()
+        verify(api).fetchCharacters(currentPage)
+    }
+
     private suspend fun mockSuccessCase() {
-        whenever(api.fetchCharacters()).thenReturn(characterResponse)
+        whenever(api.fetchCharacters(any())).thenReturn(characterResponse)
         service = CharacterListService(api)
     }
 
     private suspend fun mockFailureCase() {
-        whenever(api.fetchCharacters()).thenThrow(RuntimeException(backendExceptionErrorMessage))
+        whenever(api.fetchCharacters(any())).thenThrow(RuntimeException(backendExceptionErrorMessage))
         service = CharacterListService(api)
     }
 }
