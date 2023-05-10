@@ -19,15 +19,20 @@ class CharacterListViewModel @Inject constructor(val repository: CharacterListRe
 
     var currentPage = 1
     val characters = MutableLiveData<List<RAMCharacter>>()
+    var allDataLoaded = false
 
     fun loadCharacters() {
-        viewModelScope.launch {
-            repository.getCharacters(currentPage).collect {
-                if (it.isSuccess) {
-                    val response = it.getOrNull()!!
-                    characters.value = (response.results)
-                    response.info.next?.let {
-                        currentPage++
+        if (!allDataLoaded) {
+            viewModelScope.launch {
+                repository.getCharacters(currentPage).collect {
+                    if (it.isSuccess) {
+                        val response = it.getOrNull()!!
+                        characters.value = (response.results)
+                        if (response.info.next == null) {
+                            allDataLoaded =true
+                        }else{
+                            currentPage++
+                        }
                     }
                 }
             }

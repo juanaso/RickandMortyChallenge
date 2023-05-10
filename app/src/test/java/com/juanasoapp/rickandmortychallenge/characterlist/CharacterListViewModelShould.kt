@@ -64,6 +64,27 @@ class CharacterListViewModelShould : BaseUnitTest() {
         assertEquals(2, viewModel.currentPage)
     }
 
+    @ExperimentalCoroutinesApi
+    @Test
+    fun notCallGetCharactersWhenAllDataLoaded() {
+        repository = mock<CharacterListRepository> {
+            onBlocking { getCharacters(any()) } doReturn flowOf(
+                Result.success(
+                    characterResponse
+                )
+            )
+        }
+
+        whenever(characterResponse.results).thenReturn(ramCharacters)
+        whenever(expected.getOrNull()?.info).thenReturn(info)
+        whenever(info.next).thenReturn(null)
+
+        val viewModel = CharacterListViewModel(repository)
+        viewModel.loadCharacters()
+        viewModel.loadCharacters()
+        verify(repository, times(1)).getCharacters()
+    }
+
     private fun mockFailureCase(): CharacterListViewModel {
         runBlocking {
             whenever(repository.getCharacters()).thenReturn(
