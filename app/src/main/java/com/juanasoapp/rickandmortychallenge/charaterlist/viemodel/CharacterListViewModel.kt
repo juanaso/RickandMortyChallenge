@@ -21,14 +21,16 @@ class CharacterListViewModel @Inject constructor(val repository: CharacterListRe
     fun loadCharacters() {
         if (!allDataLoaded) {
             viewModelScope.launch {
-                repository.getCharacters(currentPage,currentQuery).collect {
+                repository.getCharacters(currentPage, currentQuery).collect {
                     if (it.isSuccess) {
-                        val response = it.getOrNull()!!
-                        characters.value = (response.results)
-                        if (response.info.next == null) {
-                            allDataLoaded =true
-                        }else{
-                            currentPage++
+                        val response = it.getOrNull()
+                        response?.let {
+                            characters.value = (response.results)
+                            if (response.info.next == null) {
+                                allDataLoaded = true
+                            } else {
+                                currentPage++
+                            }
                         }
                     }
                 }
@@ -38,6 +40,7 @@ class CharacterListViewModel @Inject constructor(val repository: CharacterListRe
 
     fun onTextSet(s: String) {
         currentQuery = s
+        characters.value = arrayListOf()
         loadCharacters()
     }
 }

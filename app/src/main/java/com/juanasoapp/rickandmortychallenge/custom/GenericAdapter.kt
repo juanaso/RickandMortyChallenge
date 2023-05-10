@@ -11,8 +11,8 @@ import com.juanasoapp.rickandmortychallenge.R
 abstract class GenericAdapter<T>(var listItems: ArrayList<T>, var layoutId: Int, var minimumAmountToReload: Int = 5) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    fun setItems(listItems: ArrayList<T>) {
-        this.listItems.addAll(listItems)
+    fun setItems(newItems: ArrayList<T>) {
+        listItems=newItems
         notifyDataSetChanged()
     }
 

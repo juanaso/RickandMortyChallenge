@@ -25,6 +25,7 @@ class CharacterListViewModelShould : BaseUnitTest() {
     private var repository: CharacterListRepository = mock()
     private val characterResponse = mock<CharacterResponse>()
     private val ramCharacters = mock<List<RAMCharacter>>()
+    private val ramCharactersWith2 = listOf(mock<RAMCharacter>(), mock<RAMCharacter>())
     private val info = mock<Info>()
     private val expected = Result.success(characterResponse)
     private val exception = RuntimeException("Something went wrong")
@@ -83,14 +84,33 @@ class CharacterListViewModelShould : BaseUnitTest() {
         verify(repository).getCharacters(currentPage,currentQuery)
     }
 
-    private fun mockFailureCase(): CharacterListViewModel {
-        runBlocking {
-            whenever(repository.getCharacters(1,"")).thenReturn(
-                flow { emit(Result.failure<CharacterResponse>(exception)) }
-            )
-        }
-        return CharacterListViewModel(repository)
+    @ExperimentalCoroutinesApi
+    @Test
+    fun emptySeriesListOnSetQueryTest() = runBlockingTest {
+        val viewModel = mockSuccessfulCaseWith2()
+        viewModel.loadCharacters()
+        viewModel.onTextSet("testString")
+        assertEquals(0, viewModel.characters.value?.size)
     }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun increaseAmountOfCharacterWhenSecondLoad() = runBlockingTest {
+        val viewModel = mockSuccessfulCaseWith2()
+        viewModel.loadCharacters()
+        viewModel.currentPage = 2
+        viewModel.loadCharacters()
+        assertEquals(4, viewModel.characters.value?.size)
+    }
+
+        private fun mockFailureCase(): CharacterListViewModel {
+            runBlocking {
+                whenever(repository.getCharacters(1,"")).thenReturn(
+                    flow { emit(Result.failure<CharacterResponse>(exception)) }
+                )
+            }
+            return CharacterListViewModel(repository)
+        }
 
     private fun mockSuccessfulCase(next: String? = ""): CharacterListViewModel {
         repository = mock<CharacterListRepository> {
@@ -101,6 +121,19 @@ class CharacterListViewModelShould : BaseUnitTest() {
             )
         }
         whenever(characterResponse.results).thenReturn(ramCharacters)
+        whenever(expected.getOrNull()?.info).thenReturn(info)
+        whenever(info.next).thenReturn(next)
+        return CharacterListViewModel(repository)
+    }
+    private fun mockSuccessfulCaseWith2(next: String? = ""): CharacterListViewModel {
+        repository = mock<CharacterListRepository> {
+            onBlocking { getCharacters(1,"") } doReturn flowOf(
+                Result.success(
+                    characterResponse
+                )
+            )
+        }
+        whenever(characterResponse.results).thenReturn(ramCharactersWith2)
         whenever(expected.getOrNull()?.info).thenReturn(info)
         whenever(info.next).thenReturn(next)
         return CharacterListViewModel(repository)

@@ -2,11 +2,13 @@ package com.juanasoapp.rickandmortychallenge
 
 import android.view.KeyEvent
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.juanasoapp.rickandmortychallenge.core.idlingResource
 import com.juanasoapp.rickandmortychallenge.utils.BaseUITest
 import com.juanasoapp.rickandmortychallenge.utils.SearchViewActionExtension
 import com.schibsted.spain.barista.assertion.BaristaRecyclerViewAssertions
@@ -41,6 +43,14 @@ class CharacterListFeatures: BaseUITest() {
             .perform(ViewActions.swipeUp())
 
         assertDisplayed("Aqua Morty")
+    }
+
+    @Test
+    fun emptySeriesListOnNewSearch(){
+        enterTextAndSearch()
+        IdlingRegistry.getInstance().unregister(idlingResource)
+        enterTextAndSearch("jen")
+        BaristaRecyclerViewAssertions.assertRecyclerViewItemCount(R.id.homeCharacterRecycler, 0)
     }
 
     @Test
