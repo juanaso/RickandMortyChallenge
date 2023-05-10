@@ -67,18 +67,7 @@ class CharacterListViewModelShould : BaseUnitTest() {
     @ExperimentalCoroutinesApi
     @Test
     fun notCallGetCharactersWhenAllDataLoaded() {
-        repository = mock<CharacterListRepository> {
-            onBlocking { getCharacters(any()) } doReturn flowOf(
-                Result.success(
-                    characterResponse
-                )
-            )
-        }
-
-        whenever(characterResponse.results).thenReturn(ramCharacters)
-        whenever(expected.getOrNull()?.info).thenReturn(info)
-        whenever(info.next).thenReturn(null)
-
+        mockSuccessfulCase(null)
         val viewModel = CharacterListViewModel(repository)
         viewModel.loadCharacters()
         viewModel.loadCharacters()
@@ -94,7 +83,7 @@ class CharacterListViewModelShould : BaseUnitTest() {
         return CharacterListViewModel(repository)
     }
 
-    private fun mockSuccessfulCase(): CharacterListViewModel {
+    private fun mockSuccessfulCase(next: String? = ""): CharacterListViewModel {
         repository = mock<CharacterListRepository> {
             onBlocking { getCharacters(any()) } doReturn flowOf(
                 Result.success(
@@ -104,7 +93,7 @@ class CharacterListViewModelShould : BaseUnitTest() {
         }
         whenever(characterResponse.results).thenReturn(ramCharacters)
         whenever(expected.getOrNull()?.info).thenReturn(info)
-        whenever(info.next).thenReturn("")
+        whenever(info.next).thenReturn(next)
         return CharacterListViewModel(repository)
     }
 }
