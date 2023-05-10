@@ -1,4 +1,4 @@
-package com.juanasoapp.rickandmortychallenge.utils.characterlist
+package com.juanasoapp.rickandmortychallenge.characterlist
 
 import com.juanasoapp.rickandmortychallenge.api.RickAndMortyAPI
 import com.juanasoapp.rickandmortychallenge.charaterlist.api.CharacterListService

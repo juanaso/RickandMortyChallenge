@@ -3,9 +3,12 @@ package com.juanasoapp.rickandmortychallenge.custom
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.juanasoapp.rickandmortychallenge.R
 
-abstract class GenericAdapter<T>(var listItems: List<T>) :
+abstract class GenericAdapter<T>(var listItems: List<T>, var layoutId: Int) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun setItems(listItems: List<T>) {
@@ -15,8 +18,7 @@ abstract class GenericAdapter<T>(var listItems: List<T>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return getViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(viewType, parent, false), viewType
+            DataBindingUtil.inflate(LayoutInflater.from(parent.context), layoutId, parent, false)
         )
     }
 
@@ -29,12 +31,12 @@ abstract class GenericAdapter<T>(var listItems: List<T>) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return getLayoutId(position, listItems[position])
+        return layoutId
     }
 
-    protected abstract fun getLayoutId(position: Int, obj: T): Int
-
-    abstract fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder
+    abstract fun getViewHolder(
+        viewDataBinding: ViewDataBinding
+    ): RecyclerView.ViewHolder
 
     internal interface Binder<T> {
         fun bind(data: T)

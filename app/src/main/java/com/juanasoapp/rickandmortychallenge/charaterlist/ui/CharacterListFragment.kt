@@ -5,55 +5,67 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.juanasoapp.rickandmortychallenge.R
 import com.juanasoapp.rickandmortychallenge.charaterlist.viemodel.CharacterListViewModel
 import com.juanasoapp.rickandmortychallenge.custom.GenericAdapter
+import com.juanasoapp.rickandmortychallenge.databinding.CharacterListItemBinding
+import com.juanasoapp.rickandmortychallenge.databinding.FragmentCharacterListBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_character_list.*
 
 @AndroidEntryPoint
 class CharacterListFragment : Fragment() {
 
     private val viewModel: CharacterListViewModel by activityViewModels()
     var genericAdapter: GenericAdapter<Any>? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    lateinit var binding: FragmentCharacterListBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_character_list, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_character_list,
+            container,
+            false
+        )
+        binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpAdapter()
+        setUpObservers()
+    }
 
-        genericAdapter = object : GenericAdapter<Any>(emptyList()) {
-            override fun getLayoutId(position: Int, obj: Any): Int {
-                return R.layout.character_list_item
-            }
+    private fun setUpAdapter() {
 
-            override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
-                return CharacterViewHolder(view)
+        val staggeredGridLayoutManager =
+            StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL)
+
+        genericAdapter = object : GenericAdapter<Any>(emptyList(), R.layout.character_list_item) {
+
+            override fun getViewHolder(viewDataBinding: ViewDataBinding): RecyclerView.ViewHolder {
+                return CharacterViewHolder(viewDataBinding as CharacterListItemBinding)
             }
         }
-        homeCharacterRecycler.adapter = genericAdapter
+        binding.homeCharacterRecycler.layoutManager = staggeredGridLayoutManager
+        binding.homeCharacterRecycler.adapter = genericAdapter
+    }
 
+    private fun setUpObservers() {
         viewModel.characters.observe(this as LifecycleOwner) { response ->
             response.getOrNull()?.let {
                 (genericAdapter as GenericAdapter<Any>).setItems(it.results)
             }
         }
-    }
-
-    companion object {
-
     }
 }
