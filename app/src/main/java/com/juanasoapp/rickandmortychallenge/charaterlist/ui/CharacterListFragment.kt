@@ -26,7 +26,6 @@ class CharacterListFragment : Fragment() {
     private val viewModel: CharacterListViewModel by activityViewModels()
     var genericAdapter: GenericAdapter<Any>? = null
     lateinit var binding: FragmentCharacterListBinding
-    val spaceInPixels = 6
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +48,6 @@ class CharacterListFragment : Fragment() {
     }
 
     private fun setUpAdapter() {
-
         val staggeredGridLayoutManager =
             StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL)
 
@@ -59,7 +57,7 @@ class CharacterListFragment : Fragment() {
                 return CharacterViewHolder(viewDataBinding as CharacterListItemBinding)
             }
         }
-        binding.homeCharacterRecycler.addItemDecoration(SpacesItemDecoration(spaceInPixels))
+        binding.homeCharacterRecycler.addItemDecoration(SpacesItemDecoration())
         binding.homeCharacterRecycler.layoutManager = staggeredGridLayoutManager
         binding.homeCharacterRecycler.adapter = genericAdapter
     }
