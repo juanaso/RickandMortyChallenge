@@ -3,7 +3,6 @@ package com.juanasoapp.rickandmortychallenge.utils.characterlist
 import com.juanasoapp.rickandmortychallenge.charaterlist.api.CharacterListRepository
 import com.juanasoapp.rickandmortychallenge.charaterlist.api.CharacterListService
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.CharacterResponse
-import com.juanasoapp.rickandmortychallenge.charaterlist.model.RAMCharacter
 import com.juanasoapp.rickandmortychallenge.utils.BaseUnitTest
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times

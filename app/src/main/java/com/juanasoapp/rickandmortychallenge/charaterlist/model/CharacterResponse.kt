@@ -2,7 +2,7 @@ package com.juanasoapp.rickandmortychallenge.charaterlist.model
 
 data class CharacterResponse(
     val info: Info,
-    val results: List<Character>
+    val results: List<RAMCharacter>
 )
 
 data class Info(
@@ -12,7 +12,7 @@ data class Info(
     val prev: String?
 )
 
-data class Character(
+data class RAMCharacter(
     val id: Int,
     val name: String,
     val status: String,

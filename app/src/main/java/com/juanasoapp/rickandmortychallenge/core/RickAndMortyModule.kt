@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,7 +16,7 @@ var client = OkHttpClient()
 var idlingResource = OkHttp3IdlingResource.create("okhttp", client)
 
 @Module
-@InstallIn(FragmentComponent::class)
+@InstallIn(SingletonComponent::class)
 class RickAndMortyModule {
 
     @Provides
@@ -27,7 +28,6 @@ class RickAndMortyModule {
         logging.level = HttpLoggingInterceptor.Level.BODY
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor(logging)
-
 
         return Retrofit.Builder()
             .baseUrl("https://rickandmortyapi.com/api/")

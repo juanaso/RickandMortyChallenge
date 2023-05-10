@@ -5,14 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.juanasoapp.rickandmortychallenge.R
+import com.juanasoapp.rickandmortychallenge.charaterlist.viemodel.CharacterListViewModel
 import com.juanasoapp.rickandmortychallenge.custom.GenericAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_character_list.*
 
+@AndroidEntryPoint
 class CharacterListFragment : Fragment() {
 
+    private val viewModel: CharacterListViewModel by activityViewModels()
     var genericAdapter: GenericAdapter<Any>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +45,12 @@ class CharacterListFragment : Fragment() {
             }
         }
         homeCharacterRecycler.adapter = genericAdapter
+
+        viewModel.characters.observe(this as LifecycleOwner) { response ->
+            response.getOrNull()?.let {
+                (genericAdapter as GenericAdapter<Any>).setItems(it.results)
+            }
+        }
     }
 
     companion object {
