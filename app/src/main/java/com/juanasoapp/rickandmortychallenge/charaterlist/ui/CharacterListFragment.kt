@@ -45,6 +45,7 @@ class CharacterListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpAdapter()
         setUpObservers()
+        viewModel.loadCharacters()
     }
 
     private fun setUpAdapter() {
@@ -64,8 +65,8 @@ class CharacterListFragment : Fragment() {
 
     private fun setUpObservers() {
         viewModel.characters.observe(this as LifecycleOwner) { response ->
-            response.getOrNull()?.let {
-                (genericAdapter as GenericAdapter<Any>).setItems(it.results)
+            response.let {
+                (genericAdapter as GenericAdapter<Any>).setItems(it)
             }
         }
     }
