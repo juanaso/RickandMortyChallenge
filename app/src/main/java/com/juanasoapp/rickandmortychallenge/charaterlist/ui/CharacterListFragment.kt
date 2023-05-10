@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.juanasoapp.rickandmortychallenge.R
 import com.juanasoapp.rickandmortychallenge.charaterlist.viemodel.CharacterListViewModel
 import com.juanasoapp.rickandmortychallenge.custom.GenericAdapter
+import com.juanasoapp.rickandmortychallenge.custom.SpacesItemDecoration
 import com.juanasoapp.rickandmortychallenge.databinding.CharacterListItemBinding
 import com.juanasoapp.rickandmortychallenge.databinding.FragmentCharacterListBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,7 @@ class CharacterListFragment : Fragment() {
     private val viewModel: CharacterListViewModel by activityViewModels()
     var genericAdapter: GenericAdapter<Any>? = null
     lateinit var binding: FragmentCharacterListBinding
+    val spaceInPixels = 6
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +59,7 @@ class CharacterListFragment : Fragment() {
                 return CharacterViewHolder(viewDataBinding as CharacterListItemBinding)
             }
         }
+        binding.homeCharacterRecycler.addItemDecoration(SpacesItemDecoration(spaceInPixels))
         binding.homeCharacterRecycler.layoutManager = staggeredGridLayoutManager
         binding.homeCharacterRecycler.adapter = genericAdapter
     }
