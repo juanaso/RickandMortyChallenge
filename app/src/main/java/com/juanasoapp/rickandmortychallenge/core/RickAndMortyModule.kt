@@ -31,7 +31,7 @@ class RickAndMortyModule {
 
         return Retrofit.Builder()
             .baseUrl("https://rickandmortyapi.com/api/")
-            .client(httpClient.build())
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

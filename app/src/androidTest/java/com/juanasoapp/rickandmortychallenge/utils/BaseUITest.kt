@@ -25,7 +25,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 abstract class BaseUITest {
 
-    val characterName = "Pickle Rick"
+    val characterDummyName = "Rick"
 
 
     val mActivityRule = ActivityTestRule(MainActivity::class.java)

@@ -106,10 +106,23 @@ class CharacterListViewModelShould : BaseUnitTest() {
     fun increaseAmountOfCharacterWhenSecondLoad() = runBlockingTest {
         val viewModel = mockSuccessfulCaseWith2()
         viewModel.loadCharacters()
-//        whenever(characterResponse.results).thenReturn(ramCharactersWith22)
         viewModel.loadCharacters()
         assertEquals(4, viewModel.characters.value?.size)
     }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun restartAllDataLoadedWhenSetQueryTest() = runBlockingTest {
+        val viewModel = mockSuccessfulCaseWith2(null)
+        viewModel.loadCharacters()
+        assertEquals(viewModel.allDataLoaded,true)
+        assertEquals(viewModel.currentPage,1)
+        whenever(info.next).thenReturn("")
+        viewModel.onTextSet("testString")
+        assertEquals(viewModel.allDataLoaded,false)
+    }
+
+
 
     private fun mockFailureCase(): CharacterListViewModel {
         runBlocking {
@@ -134,20 +147,6 @@ class CharacterListViewModelShould : BaseUnitTest() {
         return CharacterListViewModel(repository)
     }
 
-    private fun mockSuccessfulCaseDummyData(next: String? = "",amountOfItems: Int): CharacterListViewModel {
-        repository = mock<CharacterListRepository> {
-            onBlocking { getCharacters(any(), any()) } doReturn flowOf(
-                Result.success(
-                    characterResponse
-                )
-            )
-        }
-        whenever(characterResponse.results).thenReturn(getListOfDummyRAMCharacters(amountOfItems))
-        whenever(expected.getOrNull()?.info).thenReturn(info)
-        whenever(info.next).thenReturn(next)
-        return CharacterListViewModel(repository)
-    }
-
     private fun mockSuccessfulCaseWith2(next: String? = ""): CharacterListViewModel {
         repository = mock<CharacterListRepository> {
             onBlocking { getCharacters(any(), any()) } doReturn flowOf(
@@ -160,13 +159,5 @@ class CharacterListViewModelShould : BaseUnitTest() {
         whenever(expected.getOrNull()?.info).thenReturn(info)
         whenever(info.next).thenReturn(next)
         return CharacterListViewModel(repository)
-    }
-
-    fun getListOfDummyRAMCharacters(amountOfItems: Int): List<RAMCharacter> {
-        val ramCharacters = ArrayList<RAMCharacter>()
-        for (i in 0 until amountOfItems) {
-            ramCharacters.add(RAMCharacter(i, "", "", "", "", "", Location("", ""), Location("", ""), "", listOf(), "", ""))
-        }
-        return ramCharacters
     }
 }

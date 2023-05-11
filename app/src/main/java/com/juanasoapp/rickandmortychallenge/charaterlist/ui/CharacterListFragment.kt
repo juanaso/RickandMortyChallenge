@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -76,6 +77,9 @@ class CharacterListFragment : Fragment() {
             (it as SearchView).isIconified = false
         }
 
+//        binding.homeCharacterSearchView.findViewById<ImageView>(R.id.search_close_btn).setOnClickListener {
+//            val a = "2"
+//        }
         binding.homeCharacterSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.onTextSet(query ?: "")
@@ -83,9 +87,7 @@ class CharacterListFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText?.isNotEmpty() == true) {
-                    viewModel.onTextSet(newText)
-                }
+                    viewModel.onTextSet(newText?:"")
                 return false
             }
         })

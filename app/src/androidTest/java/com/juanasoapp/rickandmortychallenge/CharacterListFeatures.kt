@@ -16,15 +16,15 @@ import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertD
 import org.hamcrest.CoreMatchers
 import org.junit.Test
 
-class CharacterListFeatures: BaseUITest() {
+class CharacterListFeatures : BaseUITest() {
 
     @Test
-    fun displaySearchBar(){
+    fun displaySearchBar() {
         assertDisplayed(R.id.homeCharacterSearchView)
     }
 
     @Test
-    fun displaysListOfCharacters(){
+    fun displaysListOfCharacters() {
         BaristaRecyclerViewAssertions.assertRecyclerViewItemCount(R.id.homeCharacterRecycler, 20)
 
         Espresso.onView(
@@ -38,7 +38,7 @@ class CharacterListFeatures: BaseUITest() {
     }
 
     @Test
-    fun displaySecondBatchOfCharactersOnSwipe(){
+    fun displaySecondBatchOfCharactersOnSwipe() {
         Espresso.onView(withId(R.id.homeCharacterRecycler))
             .perform(ViewActions.swipeUp())
 
@@ -46,7 +46,7 @@ class CharacterListFeatures: BaseUITest() {
     }
 
     @Test
-    fun emptySeriesListOnNewSearch(){
+    fun emptySeriesListOnNewSearch() {
         enterTextAndSearch()
         IdlingRegistry.getInstance().unregister(idlingResource)
         enterTextAndSearch("jen")
@@ -54,23 +54,50 @@ class CharacterListFeatures: BaseUITest() {
     }
 
     @Test
-    fun displaySearchedCharacter(){
+    fun displaySearchedCharacter() {
         enterTextAndSearch()
 
         Espresso.onView(
             CoreMatchers.allOf(
                 withId(R.id.characterName),
-                ViewMatchers.isDescendantOfA(nthChildOf(withId(R.id.characterName), 0))
+                ViewMatchers.isDescendantOfA(nthChildOf(withId(R.id.homeCharacterRecycler), 0))
             )
         )
-            .check(ViewAssertions.matches(withText(characterName)))
+            .check(ViewAssertions.matches(withText("Rick Sanchez")))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
-    private fun enterTextAndSearch(textToSearch:String=characterName) {
+    @Test
+    fun displayCorrectAmountOfSearchedCharacter() {
+        enterText("summer")
+        BaristaRecyclerViewAssertions.assertRecyclerViewItemCount(R.id.homeCharacterRecycler, 12)
+    }
+
+    @Test
+    fun displayAllCharactersOnPressClearSearch() {
+        enterText("summer")
+        BaristaRecyclerViewAssertions.assertRecyclerViewItemCount(R.id.homeCharacterRecycler, 12)
+        Espresso.onView(withId(R.id.search_close_btn)).perform(ViewActions.click())
+        Espresso.onView(
+            CoreMatchers.allOf(
+                withId(R.id.characterName),
+                ViewMatchers.isDescendantOfA(nthChildOf(withId(R.id.homeCharacterRecycler), 0))
+            )
+        )
+            .check(ViewAssertions.matches(withText("Rick Sanchez")))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+
+    private fun enterTextAndSearch(textToSearch: String = characterDummyName) {
         Espresso.onView(withId(R.id.homeCharacterSearchView)).perform(ViewActions.click())
         Espresso.onView(withId(R.id.homeCharacterSearchView))
             .perform(SearchViewActionExtension.typeText(textToSearch))
             .perform(ViewActions.pressKey(KeyEvent.KEYCODE_ENTER))
+    }
+
+    private fun enterText(textToSearch: String = characterDummyName) {
+        Espresso.onView(withId(R.id.homeCharacterSearchView)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.homeCharacterSearchView))
+            .perform(SearchViewActionExtension.typeText(textToSearch))
     }
 }
