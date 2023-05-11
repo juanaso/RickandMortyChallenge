@@ -14,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CharacterListViewModel @Inject constructor(val repository: CharacterListRepository) : ViewModel() {
 
+    var firstVisiblePosition: Int=0
     var currentQuery: String = ""
     var currentPage = 1
     val characters = MutableLiveData<List<RAMCharacter>>()

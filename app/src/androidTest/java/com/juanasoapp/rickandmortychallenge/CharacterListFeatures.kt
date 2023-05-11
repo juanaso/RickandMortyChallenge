@@ -2,6 +2,7 @@ package com.juanasoapp.rickandmortychallenge
 
 import android.view.KeyEvent
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
@@ -39,7 +40,7 @@ class CharacterListFeatures : BaseUITest() {
 
     @Test
     fun displaySecondBatchOfCharactersOnSwipe() {
-        Espresso.onView(withId(R.id.homeCharacterRecycler))
+        onView(withId(R.id.homeCharacterRecycler))
             .perform(ViewActions.swipeUp())
 
         assertDisplayed("Aqua Morty")
@@ -90,7 +91,7 @@ class CharacterListFeatures : BaseUITest() {
 
 
     @Test
-    fun navigateToCharacterDetailScreen(){
+    fun navigateToCharacterDetailScreen() {
         Espresso.onView(
             CoreMatchers.allOf(
                 withId(R.id.characterName),
