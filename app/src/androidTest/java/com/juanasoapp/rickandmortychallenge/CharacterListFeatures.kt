@@ -88,6 +88,18 @@ class CharacterListFeatures : BaseUITest() {
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
+
+    @Test
+    fun navigateToCharacterDetailScreen(){
+        Espresso.onView(
+            CoreMatchers.allOf(
+                withId(R.id.characterName),
+                ViewMatchers.isDescendantOfA(nthChildOf(withId(R.id.homeCharacterRecycler), 0))
+            )
+        ).perform(ViewActions.click())
+        assertDisplayed(R.id.characterDetailRoot)
+    }
+
     private fun enterTextAndSearch(textToSearch: String = characterDummyName) {
         Espresso.onView(withId(R.id.homeCharacterSearchView)).perform(ViewActions.click())
         Espresso.onView(withId(R.id.homeCharacterSearchView))

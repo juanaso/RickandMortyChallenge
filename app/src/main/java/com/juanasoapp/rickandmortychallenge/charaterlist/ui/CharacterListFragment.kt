@@ -5,12 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -62,7 +63,11 @@ class CharacterListFragment : Fragment() {
             }
 
             override fun getViewHolder(viewDataBinding: ViewDataBinding): RecyclerView.ViewHolder {
-                return CharacterViewHolder(viewDataBinding as CharacterListItemBinding)
+                return CharacterViewHolder(viewDataBinding as CharacterListItemBinding) {
+                    val action =
+                        CharacterListFragmentDirections.actionCharacterListFragmentToCharacterDetailFragment()
+                    findNavController().navigate(action)
+                }
             }
         }
         binding.homeCharacterRecycler.addItemDecoration(SpacesItemDecoration())
@@ -70,16 +75,11 @@ class CharacterListFragment : Fragment() {
         binding.homeCharacterRecycler.adapter = genericAdapter
     }
 
-
-
     private fun setUpSearchView() {
         binding.homeCharacterSearchView.setOnClickListener {
             (it as SearchView).isIconified = false
         }
 
-//        binding.homeCharacterSearchView.findViewById<ImageView>(R.id.search_close_btn).setOnClickListener {
-//            val a = "2"
-//        }
         binding.homeCharacterSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.onTextSet(query ?: "")
@@ -87,11 +87,12 @@ class CharacterListFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                    viewModel.onTextSet(newText?:"")
+                viewModel.onTextSet(newText ?: "")
                 return false
             }
         })
     }
+
     private fun setUpObservers() {
         viewModel.characters.observe(this as LifecycleOwner) { response ->
             response.let {
