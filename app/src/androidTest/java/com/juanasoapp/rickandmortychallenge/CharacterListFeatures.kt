@@ -91,13 +91,8 @@ class CharacterListFeatures : BaseUITest() {
 
 
     @Test
-    fun navigateToCharacterDetailScreen() {
-        Espresso.onView(
-            CoreMatchers.allOf(
-                withId(R.id.characterName),
-                ViewMatchers.isDescendantOfA(nthChildOf(withId(R.id.homeCharacterRecycler), 0))
-            )
-        ).perform(ViewActions.click())
+    fun shouldNavigateToCharacterDetailScreen() {
+        navigateToCharacterDetailScreen()
         assertDisplayed(R.id.characterDetailRoot)
     }
 

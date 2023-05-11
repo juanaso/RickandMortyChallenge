@@ -72,4 +72,12 @@ abstract class BaseUITest {
             }
         }
     }
+    fun navigateToCharacterDetailScreen(){
+        Espresso.onView(
+            CoreMatchers.allOf(
+                ViewMatchers.withId(R.id.characterName),
+                ViewMatchers.isDescendantOfA(nthChildOf(ViewMatchers.withId(R.id.homeCharacterRecycler), 0))
+            )
+        ).perform(ViewActions.click())
+    }
 }
