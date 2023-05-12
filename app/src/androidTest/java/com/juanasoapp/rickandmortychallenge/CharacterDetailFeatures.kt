@@ -13,4 +13,5 @@ class CharacterDetailFeatures : BaseUITest(){
         assertDisplayed("Rick Sanchez")
     }
 
+
 }

@@ -1,89 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:animateLayoutChanges="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/characterDetailRoot"
+    <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".characterdetail.ui.CharacterDetailFragment">
-
-        <ImageView
-                android:id="@+id/characterDetailImage"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@drawable/portal"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-                android:id="@+id/characterDetailName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/hello_blank_fragment"
-                app:layout_constraintTop_toBottomOf="@+id/characterDetailImage"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="16dp" />
-
-        <TextView
-                android:id="@+id/characterDetailStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Male - alive"
-                app:layout_constraintTop_toBottomOf="@+id/characterDetailName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="32dp"
-                app:layout_constraintEnd_toStartOf="@+id/characterDetailOrigin"
-                app:layout_constraintHorizontal_chainStyle="packed" />
-
-        <TextView
-                android:id="@+id/characterDetailOrigin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" - earth"
-                app:layout_constraintTop_toBottomOf="@+id/characterDetailName"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="32dp"
-                app:layout_constraintStart_toEndOf="@+id/characterDetailStatus" />
-
+            android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/characterDetailSpeciesContainer"
-                android:layout_width="wrap_content"
+                android:id="@+id/characterDetailRoot"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_gradient_border_line"
-                android:paddingStart="15dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="15dp"
-                android:paddingBottom="5dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/characterDetailStatus"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="32dp">
+                android:animateLayoutChanges="true"
+                tools:context=".characterdetail.ui.CharacterDetailFragment">
+
+            <ImageView
+                    android:id="@+id/characterDetailImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@drawable/portal"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                    android:id="@+id/characterDetailSpecies"
+                    android:id="@+id/characterDetailName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:textColor="#000"
-                    android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/hello_blank_fragment"
+                    app:layout_constraintTop_toBottomOf="@+id/characterDetailImage"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Human"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="16dp" />
 
+            <TextView
+                    android:id="@+id/characterDetailStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male - alive"
+                    app:layout_constraintTop_toBottomOf="@+id/characterDetailName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toStartOf="@+id/characterDetailOrigin"
+                    app:layout_constraintHorizontal_chainStyle="packed" />
+
+            <TextView
+                    android:id="@+id/characterDetailOrigin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - earth"
+                    app:layout_constraintTop_toBottomOf="@+id/characterDetailName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintStart_toEndOf="@+id/characterDetailStatus" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/characterDetailSpeciesContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_gradient_border_line"
+                    android:paddingStart="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/episodesContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/characterDetailName"
+                    android:layout_marginStart="16dp">
+
+                <TextView
+                        android:id="@+id/characterDetailSpecies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="#000"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Human"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/episodesContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true"
+                    app:layout_constraintTop_toBottomOf="@+id/characterDetailStatus">
+
+                <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:text="@string/app_display_title" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>
