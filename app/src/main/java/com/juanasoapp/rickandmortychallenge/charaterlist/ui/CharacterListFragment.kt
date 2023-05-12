@@ -67,7 +67,7 @@ class CharacterListFragment : Fragment() {
             override fun getViewHolder(viewDataBinding: ViewDataBinding): RecyclerView.ViewHolder {
                 return CharacterViewHolder(viewDataBinding as CharacterListItemBinding) {
                     val action =
-                        CharacterListFragmentDirections.actionCharacterListFragmentToCharacterDetailFragment()
+                        CharacterListFragmentDirections.actionCharacterListFragmentToCharacterDetailFragment(it)
                     findNavController().navigate(action)
                 }
             }

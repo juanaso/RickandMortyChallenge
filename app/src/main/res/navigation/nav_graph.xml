@@ -16,5 +16,11 @@
     <fragment
             android:id="@+id/characterDetailFragment"
             android:name="com.juanasoapp.rickandmortychallenge.characterdetail.ui.CharacterDetailFragment"
-            android:label="CharacterDetailFragment" />
+            android:label="CharacterDetailFragment" >
+        <argument
+                android:name="currentCharacter"
+                app:argType="com.juanasoapp.rickandmortychallenge.charaterlist.model.RAMCharacter"
+                app:nullable="false"
+                />
+    </fragment>
 </navigation>

@@ -9,7 +9,7 @@ class CharacterDetailFeatures : BaseUITest(){
     @Test
     fun displayCharacterName(){
         navigateToCharacterDetailScreen()
-        assertDisplayed(R.id.CharacterDetailName)
+        assertDisplayed(R.id.characterDetailName)
         assertDisplayed("Rick Sanchez")
     }
 
