@@ -5,6 +5,7 @@
         android:animateLayoutChanges="true">
 
     <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -93,17 +94,33 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/episodesContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="@dimen/episodes_viewer_row_height"
                     android:orientation="vertical"
                     android:animateLayoutChanges="true"
                     app:layout_constraintTop_toBottomOf="@+id/characterDetailStatus">
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/episodes_viewer_row_height">
 
-                <TextView
-                        android:id="@+id/title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:text="@string/app_display_title" />
+                    <TextView
+                            android:id="@+id/episodesContainerTitle"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/episodes_viewer_row_height"
+                            android:text="@string/appearances"
+                            android:layout_centerInParent="true" />
 
+                    <androidx.core.widget.ContentLoadingProgressBar
+                            android:id="@+id/episodesContainerTitleProgressBar"
+                            android:visibility="gone"
+                            android:layout_centerVertical="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true"
+                            android:indeterminateTint="@color/colorAccent"
+                            style="@style/Widget.AppCompat.ProgressBar"
+                            android:layout_toEndOf="@+id/episodesContainerTitle" />
+                </RelativeLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

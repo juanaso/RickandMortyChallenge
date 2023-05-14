@@ -3,8 +3,9 @@ package com.juanasoapp.rickandmortychallenge.utils
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.Episode
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.ViewHolderEpisode
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.ViewHolderEpisodeType
+import javax.inject.Inject
 
-class EpisodesViewHolderMapper :Function1<List<Episode>, List<ViewHolderEpisode>>  {
+class EpisodesViewHolderMapper @Inject constructor() :Function1<List<Episode>, List<ViewHolderEpisode>>  {
     override fun invoke(episodes: List<Episode>): List<ViewHolderEpisode> {
         val viewHolderEpisodes = mutableListOf<ViewHolderEpisode>()
         val sortedEpisodes = episodes.sortedBy { it.episode.substring(1, 3).toInt() }
@@ -16,14 +17,14 @@ class EpisodesViewHolderMapper :Function1<List<Episode>, List<ViewHolderEpisode>
                 viewHolderEpisodes.add(
                     ViewHolderEpisode(
                         ViewHolderEpisodeType.TITLE,
-                        "Season $currentSeason"
+                        "SEASON $currentSeason"
                     )
                 )
             }
             viewHolderEpisodes.add(
                 ViewHolderEpisode(
                     ViewHolderEpisodeType.EPISODE,
-                    "Episode ${episode.episode}: ${episode.name}"
+                    "${episode.episode}: ${episode.name}"
                 )
             )
         }

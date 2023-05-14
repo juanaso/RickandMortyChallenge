@@ -5,6 +5,7 @@ import com.juanasoapp.rickandmortychallenge.characterdetail.model.Episode
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.EpisodesResponse
 import com.juanasoapp.rickandmortychallenge.characterdetail.viewmodel.CharacterDetailViewModel
 import com.juanasoapp.rickandmortychallenge.utils.BaseUnitTest
+import com.juanasoapp.rickandmortychallenge.utils.captureValues
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -13,6 +14,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
+import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -28,14 +30,13 @@ class CharacterDetailViewModelShould : BaseUnitTest() {
     private val episode = mock<Episode>()
     private val episode2 = mock<Episode>()
     private val episodes = mock<List<Episode>>()
-    private var episodesPair = listOf(episode,episode2)
+    private var episodesPair = listOf(episode, episode2)
     private val exception = RuntimeException("Something went wrong")
-
 
     @ExperimentalCoroutinesApi
     @Test
     fun getCharacterEpisodesFromRepository() = runBlockingTest {
-        val viewModel = muckSuccessfulCase()
+        val viewModel = mockSuccessfulCase()
         viewModel.getEpisodes()
         verify(repository, times(1)).getEpisodes(episodesRaw)
     }
@@ -43,7 +44,7 @@ class CharacterDetailViewModelShould : BaseUnitTest() {
     @ExperimentalCoroutinesApi
     @Test
     fun emitsAllEpisodesFromRepository() = runBlockingTest {
-        val viewModel = muckSuccessfulCase()
+        val viewModel = mockSuccessfulCase()
         viewModel.getEpisodes()
         assertEquals(episodesResponse, viewModel.episodes.value)
     }
@@ -56,6 +57,35 @@ class CharacterDetailViewModelShould : BaseUnitTest() {
         assertNull(viewModel.episodes.value)
     }
 
+    @ExperimentalCoroutinesApi
+    @Test
+    fun notCallEpisodesWhenEpisodesAlreadyAssigned() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+        viewModel.episodes.value = episodesPair
+        viewModel.getEpisodes()
+        verify(repository, times(0)).getEpisodes(episodesRaw)
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun displaySpinnerWhileLoading() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+        viewModel.isLoadingEpisodes.captureValues {
+            viewModel.getEpisodes()
+            TestCase.assertEquals(true, values[0])
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun closeSpinnerAfterSeriesListLoads() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+        viewModel.isLoadingEpisodes.captureValues {
+            viewModel.getEpisodes()
+            TestCase.assertEquals(false, values.last())
+        }
+    }
+
     private fun mockFailureCase(): CharacterDetailViewModel {
         runBlocking {
             whenever(repository.getEpisodes(any())).thenReturn(
@@ -66,7 +96,7 @@ class CharacterDetailViewModelShould : BaseUnitTest() {
         return CharacterDetailViewModel(repository)
     }
 
-    private fun muckSuccessfulCase(): CharacterDetailViewModel {
+    private fun mockSuccessfulCase(): CharacterDetailViewModel {
         repository = mock<EpisodesRepository> {
             onBlocking { getEpisodes(any()) } doReturn flowOf(
                 Result.success(

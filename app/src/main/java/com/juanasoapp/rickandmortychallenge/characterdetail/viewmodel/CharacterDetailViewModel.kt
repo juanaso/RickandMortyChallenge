@@ -13,13 +13,19 @@ import javax.inject.Inject
 @HiltViewModel
 class CharacterDetailViewModel @Inject constructor(private val repository: EpisodesRepository) : ViewModel() {
     var episodes = MutableLiveData<List<Episode>>()
+    var isLoadingEpisodes = MutableLiveData<Boolean>()
     var episodesRaw: List<String>? = null
 
     fun getEpisodes() {
-        episodesRaw?.let {
-            viewModelScope.launch {
-                repository.getEpisodes(it).collect {
-                    episodes.value = it.getOrNull()
+       if (episodes.value.isNullOrEmpty()) {
+            episodesRaw?.let {
+                viewModelScope.launch {
+                    isLoadingEpisodes.value = true
+                    repository.getEpisodes(it).collect {
+                        isLoadingEpisodes.value = false
+                        episodes.value = it.getOrNull()
+
+                    }
                 }
             }
         }

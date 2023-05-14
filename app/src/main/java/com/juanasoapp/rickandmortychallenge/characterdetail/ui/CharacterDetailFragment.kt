@@ -1,28 +1,38 @@
 package com.juanasoapp.rickandmortychallenge.characterdetail.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.juanasoapp.rickandmortychallenge.R
+import com.juanasoapp.rickandmortychallenge.characterdetail.model.ViewHolderEpisode
+import com.juanasoapp.rickandmortychallenge.characterdetail.model.ViewHolderEpisodeType
 import com.juanasoapp.rickandmortychallenge.characterdetail.viewmodel.CharacterDetailViewModel
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.RAMCharacter
 import com.juanasoapp.rickandmortychallenge.databinding.FragmentCharacterDetailBinding
-import com.juanasoapp.rickandmortychallenge.utils.dpToPx
+import com.juanasoapp.rickandmortychallenge.utils.EpisodesViewHolderMapper
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CharacterDetailFragment : Fragment() {
 
     private val viewModel: CharacterDetailViewModel by viewModels()
-    lateinit var binding: FragmentCharacterDetailBinding
+    private lateinit var binding: FragmentCharacterDetailBinding
     private val args: CharacterDetailFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var episodesMapper: EpisodesViewHolderMapper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +53,43 @@ class CharacterDetailFragment : Fragment() {
         val currentCharacter = args.currentCharacter
         viewModel.episodesRaw = currentCharacter.episode
         setUpView(currentCharacter)
+        setUpObservers()
+    }
+
+    private fun setUpObservers() {
+        viewModel.episodes.observe(this as LifecycleOwner) { episodes ->
+            createEpisodesViewer(episodesMapper(episodes))
+        }
+
+        viewModel.isLoadingEpisodes.observe(this as LifecycleOwner) { isLoading ->
+            binding.episodesContainerTitleProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun createEpisodesViewer(episodesMapper: List<ViewHolderEpisode>) {
+        episodesMapper.forEach { viewHolderEpisode ->
+            when (viewHolderEpisode.type) {
+                ViewHolderEpisodeType.TITLE -> {
+                    addViewToEpisodesContainer(R.layout.view_holder_episode_item_title, viewHolderEpisode.description)
+                }
+                ViewHolderEpisodeType.EPISODE -> {
+                    addViewToEpisodesContainer(R.layout.view_holder_episode_item_episode, viewHolderEpisode.description)
+                }
+            }
+        }
+        expandContainer()
+        Handler(Looper.getMainLooper()).postDelayed({
+            scrollToChild(binding.scrollView, binding.episodesContainer)
+        }, 500)
+    }
+
+    fun scrollToChild(scrollView: ScrollView, childView: View) {
+        val childPosition = IntArray(2)
+        childView.getLocationInWindow(childPosition)
+        val scrollViewPosition = IntArray(2)
+        scrollView.getLocationInWindow(scrollViewPosition)
+        val scrollTo = childPosition[1] - scrollViewPosition[1]
+        scrollView.smoothScrollTo(0, scrollTo)
     }
 
     private fun setUpView(currentCharacter: RAMCharacter) {
@@ -59,35 +106,25 @@ class CharacterDetailFragment : Fragment() {
             .placeholder(R.drawable.portal)
             .into(binding.characterDetailImage)
 
-        binding.title.setOnClickListener {
+        binding.episodesContainerTitle.setOnClickListener {
             viewModel.getEpisodes()
-            binding.episodesContainer.addView(addText("test", 20))
-            binding.episodesContainer.addView(addText("test", 20))
-            binding.episodesContainer.addView(addText("test", 20))
-            binding.episodesContainer.addView(addText("test", 20))
-            binding.episodesContainer.addView(addText("test", 20))
-            binding.episodesContainer.addView(addText("test", 20))
-            binding.episodesContainer.addView(addText("test", 20))
-            binding.episodesContainer.addView(addText("test", 20))
-            binding.episodesContainer.addView(addText("test", 20))
-            binding.episodesContainer.addView(addText("test", 20))
-            val heightInPixels = context?.let { it1 -> dpToPx(220, it1) }
-            val layoutParams = binding.episodesContainer.layoutParams
-            layoutParams.height = heightInPixels ?: 0
-            binding.episodesContainer.layoutParams = layoutParams
-
         }
     }
 
-    private fun addText(text: String, int: Int): View {
-        val textView = TextView(context)
-        val heightInPx = context?.let { dpToPx(int, it) } // convert dp to px
-        val layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            heightInPx ?: 0
-        )
-        textView.text = text
-        textView.layoutParams = layoutParams
-        return textView
+    private fun expandContainer() {
+        val layoutParams = binding.episodesContainer.layoutParams
+        val heightInPixels = resources.getDimensionPixelSize(R.dimen.episodes_viewer_row_height)
+        layoutParams.height = (heightInPixels.times(((binding.episodesContainer.childCount) + 1)))
+        binding.episodesContainer.layoutParams = layoutParams
+        if (binding.episodesContainer.childCount > 1) {
+            (binding.episodesContainer.getChildAt(3) as ViewGroup).getChildAt(0).visibility = View.VISIBLE
+        }
+    }
+
+    private fun addViewToEpisodesContainer(layoutId: Int, text: String) {
+        val inflater = LayoutInflater.from(context)
+        val view = inflater.inflate(layoutId, null)
+        view.findViewById<TextView>(R.id.description).text = text
+        binding.episodesContainer.addView(view)
     }
 }
