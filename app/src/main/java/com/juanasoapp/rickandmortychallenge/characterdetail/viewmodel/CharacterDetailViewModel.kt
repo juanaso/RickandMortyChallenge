@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CharacterDetailViewModel @Inject constructor(val repository: EpisodesRepository) : ViewModel() {
+class CharacterDetailViewModel @Inject constructor(private val repository: EpisodesRepository) : ViewModel() {
     var episodes = MutableLiveData<List<Episode>>()
     var episodesRaw: List<String>? = null
 
