@@ -3,6 +3,7 @@ package com.juanasoapp.rickandmortychallenge.characterDetail
 import com.juanasoapp.rickandmortychallenge.api.RickAndMortyAPI
 import com.juanasoapp.rickandmortychallenge.characterdetail.api.EpisodeMapper
 import com.juanasoapp.rickandmortychallenge.characterdetail.api.EpisodeService
+import com.juanasoapp.rickandmortychallenge.characterdetail.model.Episode
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.EpisodesResponse
 import com.juanasoapp.rickandmortychallenge.utils.BaseUnitTest
 import com.nhaarman.mockitokotlin2.any
@@ -24,6 +25,7 @@ class EpisodesServiceShould : BaseUnitTest() {
     var episodesRaw = mock<List<String>>()
     var episodesMapped = "1,2,3"
     private val episodeResponse = mock<EpisodesResponse>()
+    private val singleEpisodeResponse = mock<Episode>()
     private lateinit var service: EpisodeService
     private var mapper: EpisodeMapper = mock()
 
@@ -33,6 +35,14 @@ class EpisodesServiceShould : BaseUnitTest() {
         mockSuccessCase()
         service.fetchEpisodes(episodesRaw).first()
         verify(api, times(1)).fetchEpisodes(episodesMapped)
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun getSingleEpisodeFromApi() = runBlockingTest {
+        mockSuccessSingleCase()
+        service.fetchSingleEpisode(episodesRaw).first()
+        verify(api, times(1)).fetchSingleEpisodes(episodesMapped)
     }
 
     @ExperimentalCoroutinesApi
@@ -68,6 +78,14 @@ class EpisodesServiceShould : BaseUnitTest() {
         runBlocking {
             whenever(mapper.invoke(episodesRaw)).thenReturn(episodesMapped)
             whenever(api.fetchEpisodes(episodesMapped)).thenReturn(episodeResponse)
+        }
+        service = EpisodeService(api, mapper)
+    }
+
+    private suspend fun mockSuccessSingleCase() {
+        runBlocking {
+            whenever(mapper.invoke(episodesRaw)).thenReturn(episodesMapped)
+            whenever(api.fetchSingleEpisodes(episodesMapped)).thenReturn(singleEpisodeResponse)
         }
         service = EpisodeService(api, mapper)
     }

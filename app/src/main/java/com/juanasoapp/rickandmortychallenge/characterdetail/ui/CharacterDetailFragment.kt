@@ -7,15 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.juanasoapp.rickandmortychallenge.R
+import com.juanasoapp.rickandmortychallenge.characterdetail.viewmodel.CharacterDetailViewModel
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.RAMCharacter
 import com.juanasoapp.rickandmortychallenge.databinding.FragmentCharacterDetailBinding
 import com.juanasoapp.rickandmortychallenge.utils.dpToPx
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CharacterDetailFragment : Fragment() {
 
+    private val viewModel: CharacterDetailViewModel by viewModels()
     lateinit var binding: FragmentCharacterDetailBinding
     private val args: CharacterDetailFragmentArgs by navArgs()
 
@@ -36,6 +41,7 @@ class CharacterDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val currentCharacter = args.currentCharacter
+        viewModel.episodesRaw = currentCharacter.episode
         setUpView(currentCharacter)
     }
 
@@ -54,19 +60,20 @@ class CharacterDetailFragment : Fragment() {
             .into(binding.characterDetailImage)
 
         binding.title.setOnClickListener {
-            binding.episodesContainer.addView(addText("test",20))
-            binding.episodesContainer.addView(addText("test",20))
-            binding.episodesContainer.addView(addText("test",20))
-            binding.episodesContainer.addView(addText("test",20))
-            binding.episodesContainer.addView(addText("test",20))
-            binding.episodesContainer.addView(addText("test",20))
-            binding.episodesContainer.addView(addText("test",20))
-            binding.episodesContainer.addView(addText("test",20))
-            binding.episodesContainer.addView(addText("test",20))
-            binding.episodesContainer.addView(addText("test",20))
+            viewModel.getEpisodes()
+            binding.episodesContainer.addView(addText("test", 20))
+            binding.episodesContainer.addView(addText("test", 20))
+            binding.episodesContainer.addView(addText("test", 20))
+            binding.episodesContainer.addView(addText("test", 20))
+            binding.episodesContainer.addView(addText("test", 20))
+            binding.episodesContainer.addView(addText("test", 20))
+            binding.episodesContainer.addView(addText("test", 20))
+            binding.episodesContainer.addView(addText("test", 20))
+            binding.episodesContainer.addView(addText("test", 20))
+            binding.episodesContainer.addView(addText("test", 20))
             val heightInPixels = context?.let { it1 -> dpToPx(220, it1) }
             val layoutParams = binding.episodesContainer.layoutParams
-            layoutParams.height = heightInPixels?:0
+            layoutParams.height = heightInPixels ?: 0
             binding.episodesContainer.layoutParams = layoutParams
 
         }
@@ -77,7 +84,7 @@ class CharacterDetailFragment : Fragment() {
         val heightInPx = context?.let { dpToPx(int, it) } // convert dp to px
         val layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            heightInPx?:0
+            heightInPx ?: 0
         )
         textView.text = text
         textView.layoutParams = layoutParams

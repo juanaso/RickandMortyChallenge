@@ -19,8 +19,10 @@ import org.junit.Test
 class EpisodesRepositoryShould : BaseUnitTest() {
 
     var service = mock<EpisodeService>()
-    var episodesRaw = mock<List<String>>()
+    var episodesRaw = listOf("","")
+    var episodesRawSingle = listOf("")
     private val episodesResponse = mock<EpisodesResponse>()
+    private val episodesResponseSingle = mock<EpisodesResponse>()
     private val exception = RuntimeException("Something went wrong")
 
     @Test
@@ -31,9 +33,22 @@ class EpisodesRepositoryShould : BaseUnitTest() {
     }
 
     @Test
+    fun getSingleEpisodeFromService() = runBlockingTest {
+        val repository = EpisodesRepository(service)
+        repository.getEpisodes(episodesRawSingle)
+        verify(service, times(1)).fetchSingleEpisode(episodesRawSingle)
+    }
+
+    @Test
     fun emitsEpisodesFromService() = runBlockingTest {
         val repository = mockSuccessfulCase()
         Assert.assertEquals(episodesResponse, repository.getEpisodes(episodesRaw).first().getOrNull())
+    }
+
+    @Test
+    fun emitsEpisodesFromServiceWhenSingle() = runBlockingTest {
+        val repository = mockSuccessfulCaseSingle()
+        Assert.assertEquals(episodesResponseSingle, repository.getEpisodes(episodesRawSingle).first().getOrNull())
     }
 
     @Test
@@ -54,6 +69,13 @@ class EpisodesRepositoryShould : BaseUnitTest() {
     private fun mockSuccessfulCase(): EpisodesRepository {
         whenever(service.fetchEpisodes(any())).thenReturn(
             flow { emit(Result.success(episodesResponse)) }
+        )
+        return EpisodesRepository(service)
+    }
+
+    private fun mockSuccessfulCaseSingle(): EpisodesRepository {
+        whenever(service.fetchSingleEpisode(any())).thenReturn(
+            flow { emit(Result.success(episodesResponseSingle)) }
         )
         return EpisodesRepository(service)
     }

@@ -5,7 +5,6 @@ import com.juanasoapp.rickandmortychallenge.api.RickAndMortyAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -31,7 +30,7 @@ class RickAndMortyModule {
 
         return Retrofit.Builder()
             .baseUrl("https://rickandmortyapi.com/api/")
-            .client(client)
+            .client(httpClient.build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

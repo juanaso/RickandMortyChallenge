@@ -5,18 +5,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.juanasoapp.rickandmortychallenge.characterdetail.api.EpisodesRepository
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.Episode
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CharacterDetailViewModel(val repository: EpisodesRepository) : ViewModel() {
-    val episodes = MutableLiveData<List<Episode>>()
+@HiltViewModel
+class CharacterDetailViewModel @Inject constructor(val repository: EpisodesRepository) : ViewModel() {
+    var episodes = MutableLiveData<List<Episode>>()
     var episodesRaw: List<String>? = null
 
     fun getEpisodes() {
         episodesRaw?.let {
             viewModelScope.launch {
                 repository.getEpisodes(it).collect {
-                    episodes.value = it.getOrNull()?.episodes
+                    episodes.value = it.getOrNull()
                 }
             }
         }

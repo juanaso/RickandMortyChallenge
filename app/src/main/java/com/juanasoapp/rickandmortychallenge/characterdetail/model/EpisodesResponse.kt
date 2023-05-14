@@ -2,9 +2,7 @@ package com.juanasoapp.rickandmortychallenge.characterdetail.model
 
 import com.google.gson.annotations.SerializedName
 
-data class EpisodesResponse(
-    val episodes: List<Episode>
-)
+class EpisodesResponse: ArrayList<Episode>()
 
 data class Episode(
     val id: Int,

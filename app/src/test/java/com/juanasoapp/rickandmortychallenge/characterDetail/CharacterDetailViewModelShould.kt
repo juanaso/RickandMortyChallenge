@@ -25,7 +25,10 @@ class CharacterDetailViewModelShould : BaseUnitTest() {
     var episodesRaw = mock<List<String>>()
     private var repository: EpisodesRepository = mock()
     private val episodesResponse = mock<EpisodesResponse>()
+    private val episode = mock<Episode>()
+    private val episode2 = mock<Episode>()
     private val episodes = mock<List<Episode>>()
+    private var episodesPair = listOf(episode,episode2)
     private val exception = RuntimeException("Something went wrong")
 
 
@@ -42,7 +45,7 @@ class CharacterDetailViewModelShould : BaseUnitTest() {
     fun emitsAllEpisodesFromRepository() = runBlockingTest {
         val viewModel = muckSuccessfulCase()
         viewModel.getEpisodes()
-        assertEquals(episodes, viewModel.episodes.value)
+        assertEquals(episodesResponse, viewModel.episodes.value)
     }
 
     @ExperimentalCoroutinesApi
@@ -71,7 +74,7 @@ class CharacterDetailViewModelShould : BaseUnitTest() {
                 )
             )
         }
-        whenever(episodesResponse.episodes).thenReturn(episodes)
+        whenever(episodesResponse.get(any())).thenReturn(episode)
         val viewModel = CharacterDetailViewModel(repository)
         viewModel.episodesRaw = episodesRaw
         return viewModel
