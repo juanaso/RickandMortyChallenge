@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.juanasoapp.rickandmortychallenge.R
@@ -115,6 +116,12 @@ class CharacterDetailFragment : Fragment() {
 
         binding.episodesContainerTitle.setOnClickListener {
             viewModel.getEpisodes()
+        }
+
+        binding.characterDetailOrigin.setOnClickListener {
+            val action =
+                CharacterDetailFragmentDirections.actionCharacterDetailFragmentToLocationDetailFragment(currentCharacter.location.url.substringAfterLast("/"))
+            findNavController().navigate(action)
         }
     }
 

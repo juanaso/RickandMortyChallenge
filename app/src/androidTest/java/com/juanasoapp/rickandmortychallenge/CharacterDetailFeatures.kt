@@ -25,11 +25,17 @@ class CharacterDetailFeatures : BaseUITest() {
     }
 
     @Test
-    fun displayCorrectAmountOfEpisodesAndSeasons(){
+    fun displayCorrectAmountOfEpisodesAndSeasons() {
         navigateToCharacterDetailScreen(9)
         val linearLayout = onView(withId(R.id.episodesContainer))
         onView(withId(R.id.episodesContainerTitle)).perform(ViewActions.click())
         Thread.sleep(1000)
         linearLayout.check(matches(childCountIs(3)))
+    }
+
+    @Test
+    fun shouldNavigateToLocationDetailScreen() {
+        navigateToLocationOfCharacter()
+        assertDisplayed(R.id.locationDetailRoot)
     }
 }

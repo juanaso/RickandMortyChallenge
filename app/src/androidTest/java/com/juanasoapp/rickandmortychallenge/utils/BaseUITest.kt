@@ -95,4 +95,9 @@ abstract class BaseUITest {
             )
         ).perform(ViewActions.click())
     }
+
+    fun navigateToLocationOfCharacter(positionToClick: Int = 0) {
+        navigateToCharacterDetailScreen(positionToClick)
+        Espresso.onView(ViewMatchers.withId(R.id.characterDetailOrigin)).perform(ViewActions.click())
+    }
 }

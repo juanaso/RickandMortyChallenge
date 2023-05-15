@@ -26,5 +26,16 @@
                 android:name="currentBitmap"
                 app:argType="android.graphics.Bitmap"
                 app:nullable="true" />
+        <action
+                android:id="@+id/action_characterDetailFragment_to_locationDetailFragment"
+                app:destination="@id/locationDetailFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/locationDetailFragment"
+            android:name="com.juanasoapp.rickandmortychallenge.locationdetail.ui.LocationDetailFragment"
+            android:label="LocationDetailFragment" >
+        <argument
+                android:name="currentLocationId"
+                app:argType="string"/>
     </fragment>
 </navigation>
