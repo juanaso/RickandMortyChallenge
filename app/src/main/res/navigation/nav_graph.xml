@@ -22,5 +22,9 @@
                 app:argType="com.juanasoapp.rickandmortychallenge.charaterlist.model.RAMCharacter"
                 app:nullable="false"
                 />
+        <argument
+                android:name="currentBitmap"
+                app:argType="android.graphics.Bitmap"
+                app:nullable="true" />
     </fragment>
 </navigation>

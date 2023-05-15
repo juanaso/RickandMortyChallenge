@@ -1,5 +1,6 @@
 package com.juanasoapp.rickandmortychallenge.characterdetail.ui
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -51,8 +52,9 @@ class CharacterDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val currentCharacter = args.currentCharacter
+        val currentBitmap = args.currentBitmap
         viewModel.episodesRaw = currentCharacter.episode
-        setUpView(currentCharacter)
+        setUpView(currentCharacter,currentBitmap)
         setUpObservers()
     }
 
@@ -92,7 +94,7 @@ class CharacterDetailFragment : Fragment() {
         scrollView.smoothScrollTo(0, scrollTo)
     }
 
-    private fun setUpView(currentCharacter: RAMCharacter) {
+    private fun setUpView(currentCharacter: RAMCharacter, currentBitmap: Bitmap?) {
         binding.characterDetailName.text = currentCharacter.name
         binding.characterDetailSpecies.text = currentCharacter.species
         binding.characterDetailStatus.text = context?.getString(
@@ -101,10 +103,15 @@ class CharacterDetailFragment : Fragment() {
         )
         binding.characterDetailOrigin.text = context?.getString(R.string.origin_place_holder, currentCharacter.origin.name)
 
+
+        if (currentBitmap == null){
         Glide.with(this)
             .load(currentCharacter.image)
             .placeholder(R.drawable.portal)
             .into(binding.characterDetailImage)
+        }else{
+            binding.characterDetailImage.setImageBitmap(currentBitmap)
+        }
 
         binding.episodesContainerTitle.setOnClickListener {
             viewModel.getEpisodes()
@@ -116,9 +123,6 @@ class CharacterDetailFragment : Fragment() {
         val heightInPixels = resources.getDimensionPixelSize(R.dimen.episodes_viewer_row_height)
         layoutParams.height = (heightInPixels.times(((binding.episodesContainer.childCount) + 1)))
         binding.episodesContainer.layoutParams = layoutParams
-        if (binding.episodesContainer.childCount > 1) {
-            (binding.episodesContainer.getChildAt(3) as ViewGroup).getChildAt(0).visibility = View.VISIBLE
-        }
     }
 
     private fun addViewToEpisodesContainer(layoutId: Int, text: String) {

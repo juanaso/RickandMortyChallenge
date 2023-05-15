@@ -1,8 +1,10 @@
 package com.juanasoapp.rickandmortychallenge.charaterlist.ui
 
+import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.juanasoapp.rickandmortychallenge.R
@@ -12,7 +14,7 @@ import com.juanasoapp.rickandmortychallenge.databinding.CharacterListItemBinding
 import com.juanasoapp.rickandmortychallenge.databinding.FragmentCharacterListBinding
 import kotlinx.android.synthetic.main.character_list_item.view.*
 
-class CharacterViewHolder(binding: CharacterListItemBinding, val onClick:((RAMCharacter) -> Unit)) : RecyclerView.ViewHolder(binding.root),
+class CharacterViewHolder(binding: CharacterListItemBinding, val onClick:((RAMCharacter, Bitmap) -> Unit)) : RecyclerView.ViewHolder(binding.root),
     GenericAdapter.Binder<RAMCharacter> {
     private var title: TextView = binding.characterName
     private var image: ImageView = binding.characterImage
@@ -25,7 +27,7 @@ class CharacterViewHolder(binding: CharacterListItemBinding, val onClick:((RAMCh
             .placeholder(R.drawable.portal)
             .into(image)
         characterItemContainer.setOnClickListener {
-            onClick.invoke(data)
+            onClick.invoke(data,image.drawable.toBitmap())
         }
     }
 }
