@@ -2,6 +2,8 @@ package com.juanasoapp.rickandmortychallenge.utils
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.children
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingRegistry
@@ -72,11 +74,24 @@ abstract class BaseUITest {
             }
         }
     }
-    fun navigateToCharacterDetailScreen(){
+
+    fun childCountIs(expectedChildCount: Int): Matcher<View?>? {
+        return object : TypeSafeMatcher<View?>() {
+            override fun matchesSafely(view: View?): Boolean {
+                return (view as LinearLayoutCompat).childCount == expectedChildCount
+            }
+
+            override fun describeTo(description: Description) {
+                description.appendText("with child count: $expectedChildCount")
+            }
+        }
+    }
+
+    fun navigateToCharacterDetailScreen(positionToClick:Int = 0){
         Espresso.onView(
             CoreMatchers.allOf(
                 ViewMatchers.withId(R.id.characterName),
-                ViewMatchers.isDescendantOfA(nthChildOf(ViewMatchers.withId(R.id.homeCharacterRecycler), 0))
+                ViewMatchers.isDescendantOfA(nthChildOf(ViewMatchers.withId(R.id.homeCharacterRecycler), positionToClick))
             )
         ).perform(ViewActions.click())
     }
