@@ -20,7 +20,6 @@ class LocationDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     lateinit var locationId: String
-    lateinit var residents: List<String>
     var currentLocation = MutableLiveData<RAMLocation>()
     val currentCharacters = MutableLiveData<DefinedCharacterResponse>()
 

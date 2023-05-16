@@ -20,7 +20,7 @@ class LocationDetailFragmentFeatures : BaseUITest()  {
 
     @Test
     fun displayResidents(){
-        navigateToLocationOfCharacter()
-        BaristaRecyclerViewAssertions.assertRecyclerViewItemCount(R.id.locationDetailCharacterRecycler, 27)
+        navigateToLocationOfCharacter(9)
+        BaristaRecyclerViewAssertions.assertRecyclerViewItemCount(R.id.locationDetailCharacterRecycler, 9)
     }
 }

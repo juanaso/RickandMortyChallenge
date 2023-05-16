@@ -37,7 +37,7 @@ abstract class GenericAdapter<T>(var listItems: ArrayList<T>, var layoutId: Int,
         return layoutId
     }
 
-    abstract fun onLoadMoreItems()
+    open fun onLoadMoreItems(){}
 
     abstract fun getViewHolder(
         viewDataBinding: ViewDataBinding
