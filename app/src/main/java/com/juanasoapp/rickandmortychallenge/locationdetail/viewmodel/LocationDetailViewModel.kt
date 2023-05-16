@@ -24,10 +24,12 @@ class LocationDetailViewModel @Inject constructor(
     val currentCharacters = MutableLiveData<DefinedCharacterResponse>()
 
     fun getLocation() {
-        viewModelScope.launch {
-            repository.getLocation(locationId).collect {
-                currentLocation.value = it.getOrNull()
-                getCharacters()
+        if (currentLocation.value == null) {
+            viewModelScope.launch {
+                repository.getLocation(locationId).collect {
+                    currentLocation.value = it.getOrNull()
+                    getCharacters()
+                }
             }
         }
     }

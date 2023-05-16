@@ -1,12 +1,13 @@
 package com.juanasoapp.rickandmortychallenge.locationdetail.ui
 
+import android.graphics.Paint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
@@ -16,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.juanasoapp.rickandmortychallenge.R
 import com.juanasoapp.rickandmortychallenge.charaterlist.model.DefinedCharacterResponse
-import com.juanasoapp.rickandmortychallenge.charaterlist.ui.CharacterListFragmentDirections
 import com.juanasoapp.rickandmortychallenge.charaterlist.ui.CharacterViewHolder
 import com.juanasoapp.rickandmortychallenge.custom.GenericAdapter
 import com.juanasoapp.rickandmortychallenge.custom.SpacesItemDecoration
@@ -69,9 +69,9 @@ class LocationDetailFragment : Fragment() {
         genericAdapter = object : GenericAdapter<Any>(arrayListOf(), R.layout.character_list_item) {
 
             override fun getViewHolder(viewDataBinding: ViewDataBinding): RecyclerView.ViewHolder {
-                return CharacterViewHolder(viewDataBinding as CharacterListItemBinding) { currentCharacyer,currentBitmap ->
+                return CharacterViewHolder(viewDataBinding as CharacterListItemBinding) { currentCharacter,currentBitmap ->
                     val action =
-                        LocationDetailFragmentDirections.actionLocationDetailFragmentToCharacterDetailFragment(currentCharacyer,currentBitmap)
+                        LocationDetailFragmentDirections.actionLocationDetailFragmentToCharacterDetailFragment(currentCharacter,currentBitmap)
                     findNavController().navigate(action)
                 }
             }
@@ -90,6 +90,5 @@ class LocationDetailFragment : Fragment() {
         binding.locationDetailDimension.text = location.dimension
         binding.locationDetailDimension.text = context?.getString(
             R.string.location_dimension_placeholder, location.dimension.capitalize())
-
     }
 }

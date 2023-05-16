@@ -1,6 +1,7 @@
 package com.juanasoapp.rickandmortychallenge.characterdetail.ui
 
 import android.graphics.Bitmap
+import android.graphics.Paint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -55,7 +56,7 @@ class CharacterDetailFragment : Fragment() {
         val currentCharacter = args.currentCharacter
         val currentBitmap = args.currentBitmap
         viewModel.episodesRaw = currentCharacter.episode
-        setUpView(currentCharacter,currentBitmap)
+        setUpView(currentCharacter, currentBitmap)
         setUpObservers()
     }
 
@@ -102,15 +103,16 @@ class CharacterDetailFragment : Fragment() {
             R.string.status_place_holder, currentCharacter.gender,
             currentCharacter.status
         )
-        binding.characterDetailOrigin.text = context?.getString(R.string.origin_place_holder, currentCharacter.origin.name)
+        binding.characterDetailOrigin.text = context?.getString(R.string.origin_place_holder, currentCharacter.location.name)
+        binding.characterDetailOrigin.paintFlags =  Paint.UNDERLINE_TEXT_FLAG
+        binding.episodesContainerTitle.paintFlags =  Paint.UNDERLINE_TEXT_FLAG
 
-
-        if (currentBitmap == null){
-        Glide.with(this)
-            .load(currentCharacter.image)
-            .placeholder(R.drawable.portal)
-            .into(binding.characterDetailImage)
-        }else{
+        if (currentBitmap == null) {
+            Glide.with(this)
+                .load(currentCharacter.image)
+                .placeholder(R.drawable.portal)
+                .into(binding.characterDetailImage)
+        } else {
             binding.characterDetailImage.setImageBitmap(currentBitmap)
         }
 
@@ -120,7 +122,11 @@ class CharacterDetailFragment : Fragment() {
 
         binding.characterDetailOrigin.setOnClickListener {
             val action =
-                CharacterDetailFragmentDirections.actionCharacterDetailFragmentToLocationDetailFragment(currentCharacter.location.url.substringAfterLast("/"))
+                CharacterDetailFragmentDirections.actionCharacterDetailFragmentToLocationDetailFragment(
+                    currentCharacter.location.url.substringAfterLast(
+                        "/"
+                    )
+                )
             findNavController().navigate(action)
         }
     }
