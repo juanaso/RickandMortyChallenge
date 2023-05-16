@@ -1,5 +1,7 @@
-package com.juanasoapp.rickandmortychallenge.locationDetail
+package com.juanasoapp.rickandmortychallenge.locationdetail
 
+import com.juanasoapp.rickandmortychallenge.charaterlist.api.CharacterListRepository
+import com.juanasoapp.rickandmortychallenge.charaterlist.model.DefinedCharacterResponse
 import com.juanasoapp.rickandmortychallenge.locationdetail.api.LocationRepository
 import com.juanasoapp.rickandmortychallenge.locationdetail.model.RAMLocation
 import com.juanasoapp.rickandmortychallenge.locationdetail.viewmodel.LocationDetailViewModel
@@ -22,10 +24,13 @@ import org.junit.Test
 class LocationDetailViewModelShould : BaseUnitTest() {
 
     private var repository: LocationRepository = mock()
+    private var characterRepository: CharacterListRepository = mock()
+    private val characterResponse = mock<DefinedCharacterResponse>()
     private var locationResponse: RAMLocation = mock()
     private var locationId = "1"
     private lateinit var viewModel: LocationDetailViewModel
     private val exception = RuntimeException("Something went wrong")
+    var charactersRaw = mock<List<String>>()
 
     @ExperimentalCoroutinesApi
     @Test
@@ -45,6 +50,24 @@ class LocationDetailViewModelShould : BaseUnitTest() {
 
     @ExperimentalCoroutinesApi
     @Test
+    fun getCharactersFromRepository() {
+        mockSuccessfulCase()
+        viewModel.currentLocation.value = locationResponse
+        viewModel.getCharacters()
+        verify(characterRepository, times(1)).getDefinedCharacters(charactersRaw)
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun emitsCharactersFromRepository() = runBlockingTest {
+        mockSuccessfulCase()
+        viewModel.currentLocation.value = locationResponse
+        viewModel.getCharacters()
+        assertEquals(characterResponse, viewModel.currentCharacters.value)
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
     fun emitErrorWhenReceiveError() = runBlockingTest {
         mockFailureCase()
         viewModel.getLocation()
@@ -58,11 +81,19 @@ class LocationDetailViewModelShould : BaseUnitTest() {
             )
         }
 
-        viewModel =  LocationDetailViewModel(repository)
+        viewModel = LocationDetailViewModel(repository, characterRepository)
         viewModel.locationId = locationId
     }
 
     private fun mockSuccessfulCase() {
+        characterRepository = mock<CharacterListRepository> {
+            onBlocking { getDefinedCharacters(any()) } doReturn flowOf(
+                Result.success(
+                    characterResponse
+                )
+            )
+        }
+
         repository = mock<LocationRepository> {
             onBlocking { getLocation(any()) } doReturn flowOf(
                 Result.success(
@@ -70,7 +101,8 @@ class LocationDetailViewModelShould : BaseUnitTest() {
                 )
             )
         }
-        viewModel = LocationDetailViewModel(repository)
+        viewModel = LocationDetailViewModel(repository, characterRepository)
+        whenever(locationResponse.residents).thenReturn(charactersRaw)
         viewModel.locationId = locationId
     }
 }

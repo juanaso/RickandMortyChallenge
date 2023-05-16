@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import java.lang.RuntimeException
 import javax.inject.Inject
 
-class EpisodeService @Inject constructor(var api: RickAndMortyAPI, var mapper: EpisodeMapper) {
+class EpisodeService @Inject constructor(var api: RickAndMortyAPI, var mapper: URLRawDataMapper) {
     val backendExceptionErrorMessage = "Backend Exception"
 
     fun fetchEpisodes(episodesRaw: List<String>): Flow<Result<EpisodesResponse>> {

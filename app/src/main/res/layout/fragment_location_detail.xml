@@ -19,7 +19,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/episodes_viewer_row_height"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="test"
                     android:gravity="center"
                     tools:text="Citadel of Ricks"/>
 
@@ -29,7 +28,6 @@
                     android:layout_height="@dimen/episodes_viewer_row_height"
                     app:layout_constraintTop_toBottomOf="@+id/locationDetailName"
                     android:gravity="center"
-                    android:text="test"
                     tools:text="Dimension : Unkown"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="8dp"
@@ -54,7 +52,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="test"
                         android:textColor="#000"
                         android:textSize="15sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -65,7 +62,29 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                    android:id="@+id/locationDetailResidents"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/episodes_viewer_row_height"
+                    app:layout_constraintTop_toBottomOf="@+id/locationDetailType"
+                    android:gravity="center"
+                    android:text="@string/residents"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/locationDetailCharacterRecycler"
+                    android:layout_width="match_parent"
+                    android:paddingTop="20dp"
+                    android:clipToPadding="false"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/locationDetailResidents"
+                    tools:layoutManager="StaggeredGridLayoutManager"
+                    tools:listitem="@layout/character_list_item"
+                    tools:itemCount="1"
+                    />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

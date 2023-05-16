@@ -1,7 +1,7 @@
 package com.juanasoapp.rickandmortychallenge.characterDetail
 
 import com.juanasoapp.rickandmortychallenge.api.RickAndMortyAPI
-import com.juanasoapp.rickandmortychallenge.characterdetail.api.EpisodeMapper
+import com.juanasoapp.rickandmortychallenge.characterdetail.api.URLRawDataMapper
 import com.juanasoapp.rickandmortychallenge.characterdetail.api.EpisodeService
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.Episode
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.EpisodesResponse
@@ -27,7 +27,7 @@ class EpisodesServiceShould : BaseUnitTest() {
     private val episodeResponse = mock<EpisodesResponse>()
     private val singleEpisodeResponse = mock<Episode>()
     private lateinit var service: EpisodeService
-    private var mapper: EpisodeMapper = mock()
+    private var mapper: URLRawDataMapper = mock()
 
     @ExperimentalCoroutinesApi
     @Test

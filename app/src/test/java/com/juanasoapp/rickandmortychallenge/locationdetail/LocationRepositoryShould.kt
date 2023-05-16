@@ -1,4 +1,4 @@
-package com.juanasoapp.rickandmortychallenge.locationDetail
+package com.juanasoapp.rickandmortychallenge.locationdetail
 
 import com.juanasoapp.rickandmortychallenge.locationdetail.api.LocationRepository
 import com.juanasoapp.rickandmortychallenge.locationdetail.api.LocationService
