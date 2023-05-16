@@ -8,7 +8,7 @@
             android:id="@+id/characterListFragment"
             android:name="com.juanasoapp.rickandmortychallenge.charaterlist.ui.CharacterListFragment"
             android:label="fragment_character_list"
-            tools:layout="@layout/fragment_character_list" >
+            tools:layout="@layout/fragment_character_list">
         <action
                 android:id="@+id/action_characterListFragment_to_characterDetailFragment"
                 app:destination="@id/characterDetailFragment" />
@@ -16,12 +16,12 @@
     <fragment
             android:id="@+id/characterDetailFragment"
             android:name="com.juanasoapp.rickandmortychallenge.characterdetail.ui.CharacterDetailFragment"
-            android:label="CharacterDetailFragment" >
+            android:label="CharacterDetailFragment"
+            tools:layout="@layout/fragment_character_detail">
         <argument
                 android:name="currentCharacter"
                 app:argType="com.juanasoapp.rickandmortychallenge.charaterlist.model.RAMCharacter"
-                app:nullable="false"
-                />
+                app:nullable="false" />
         <argument
                 android:name="currentBitmap"
                 app:argType="android.graphics.Bitmap"
@@ -29,16 +29,25 @@
         <action
                 android:id="@+id/action_characterDetailFragment_to_locationDetailFragment"
                 app:destination="@id/locationDetailFragment" />
+        <action
+                android:id="@+id/action_characterDetailFragment_to_episodeDetailFragment"
+                app:destination="@id/episodeDetailFragment" />
     </fragment>
     <fragment
             android:id="@+id/locationDetailFragment"
             android:name="com.juanasoapp.rickandmortychallenge.locationdetail.ui.LocationDetailFragment"
-            android:label="LocationDetailFragment" >
+            android:label="LocationDetailFragment"
+            tools:layout="@layout/fragment_location_detail">
         <argument
                 android:name="currentLocationId"
-                app:argType="string"/>
+                app:argType="string" />
         <action
                 android:id="@+id/action_locationDetailFragment_to_characterDetailFragment"
                 app:destination="@id/characterDetailFragment" />
     </fragment>
+    <fragment
+            android:id="@+id/episodeDetailFragment"
+            android:name="com.juanasoapp.rickandmortychallenge.episodedetail.ui.EpisodeDetailFragment"
+            android:label="EpisodeDetailFragment"
+            tools:layout="@layout/fragment_episode_detail"/>
 </navigation>

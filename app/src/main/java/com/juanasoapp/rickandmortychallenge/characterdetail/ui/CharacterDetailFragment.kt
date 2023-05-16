@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.juanasoapp.rickandmortychallenge.R
+import com.juanasoapp.rickandmortychallenge.characterdetail.model.Episode
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.ViewHolderEpisode
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.ViewHolderEpisodeType
 import com.juanasoapp.rickandmortychallenge.characterdetail.viewmodel.CharacterDetailViewModel
@@ -70,14 +71,14 @@ class CharacterDetailFragment : Fragment() {
         }
     }
 
-    private fun createEpisodesViewer(episodesMapper: List<ViewHolderEpisode>) {
-        episodesMapper.forEach { viewHolderEpisode ->
+    private fun createEpisodesViewer(episodesMapped: List<ViewHolderEpisode>) {
+        episodesMapped.forEach { viewHolderEpisode ->
             when (viewHolderEpisode.type) {
                 ViewHolderEpisodeType.TITLE -> {
                     addViewToEpisodesContainer(R.layout.view_holder_episode_item_title, viewHolderEpisode.description)
                 }
                 ViewHolderEpisodeType.EPISODE -> {
-                    addViewToEpisodesContainer(R.layout.view_holder_episode_item_episode, viewHolderEpisode.description)
+                    addViewToEpisodesContainer(R.layout.view_holder_episode_item_episode, viewHolderEpisode.description, viewHolderEpisode.episode)
                 }
             }
         }
@@ -87,7 +88,7 @@ class CharacterDetailFragment : Fragment() {
         }, 500)
     }
 
-    fun scrollToChild(scrollView: ScrollView, childView: View) {
+    private fun scrollToChild(scrollView: ScrollView, childView: View) {
         val childPosition = IntArray(2)
         childView.getLocationInWindow(childPosition)
         val scrollViewPosition = IntArray(2)
@@ -104,8 +105,8 @@ class CharacterDetailFragment : Fragment() {
             currentCharacter.status
         )
         binding.characterDetailOrigin.text = context?.getString(R.string.origin_place_holder, currentCharacter.location.name)
-        binding.characterDetailOrigin.paintFlags =  Paint.UNDERLINE_TEXT_FLAG
-        binding.episodesContainerTitle.paintFlags =  Paint.UNDERLINE_TEXT_FLAG
+        binding.characterDetailOrigin.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.episodesContainerTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         if (currentBitmap == null) {
             Glide.with(this)
@@ -138,10 +139,18 @@ class CharacterDetailFragment : Fragment() {
         binding.episodesContainer.layoutParams = layoutParams
     }
 
-    private fun addViewToEpisodesContainer(layoutId: Int, text: String) {
+    private fun addViewToEpisodesContainer(layoutId: Int, text: String, episode: Episode?=null) {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(layoutId, null)
         view.findViewById<TextView>(R.id.description).text = text
         binding.episodesContainer.addView(view)
+        episode?.let {
+
+            view.setOnClickListener {
+                val action =
+                    CharacterDetailFragmentDirections.actionCharacterDetailFragmentToEpisodeDetailFragment()
+                findNavController().navigate(action)
+            }
+        }
     }
 }

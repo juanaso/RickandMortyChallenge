@@ -109,8 +109,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/episodes_viewer_row_height"
                             android:text="@string/appearances"
-                            android:layout_centerInParent="true"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"
+                            android:layout_centerInParent="true" />
 
                     <androidx.core.widget.ContentLoadingProgressBar
                             android:id="@+id/episodesContainerTitleProgressBar"

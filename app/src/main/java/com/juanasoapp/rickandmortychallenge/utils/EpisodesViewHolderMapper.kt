@@ -24,7 +24,7 @@ class EpisodesViewHolderMapper @Inject constructor() :Function1<List<Episode>, L
             viewHolderEpisodes.add(
                 ViewHolderEpisode(
                     ViewHolderEpisodeType.EPISODE,
-                    "${episode.episode}: ${episode.name}"
+                    "${episode.episode}: ${episode.name}",episode
                 )
             )
         }

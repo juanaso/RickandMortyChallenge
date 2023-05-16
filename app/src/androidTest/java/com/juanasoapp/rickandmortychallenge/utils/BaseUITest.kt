@@ -2,7 +2,6 @@ package com.juanasoapp.rickandmortychallenge.utils
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.children
 import androidx.test.espresso.Espresso
@@ -83,6 +82,22 @@ abstract class BaseUITest {
 
             override fun describeTo(description: Description) {
                 description.appendText("with child count: $expectedChildCount")
+            }
+        }
+    }
+
+    fun nthChildOfLinear(parentMatcher: Matcher<View?>, childPosition: Int): Matcher<View?>? {
+        return object : TypeSafeMatcher<View>() {
+            override fun describeTo(description: Description) {
+                description.appendText("with $childPosition child view of type parentMatcher")
+            }
+
+            override fun matchesSafely(view: View): Boolean {
+                if (view.parent !is ViewGroup) {
+                    return parentMatcher.matches(view.parent)
+                }
+                val group = view.parent as ViewGroup
+                return parentMatcher.matches(view.parent) && group.getChildAt(childPosition) == view
             }
         }
     }
