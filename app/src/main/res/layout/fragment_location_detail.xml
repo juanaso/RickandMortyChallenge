@@ -83,7 +83,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/locationDetailResidents"
                     tools:layoutManager="StaggeredGridLayoutManager"
                     tools:listitem="@layout/character_list_item"
-                    tools:itemCount="1"
+                    tools:itemCount="9"
+                    app:spanCount="3"
                     />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

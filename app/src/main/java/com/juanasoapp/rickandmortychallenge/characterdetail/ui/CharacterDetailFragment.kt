@@ -148,7 +148,7 @@ class CharacterDetailFragment : Fragment() {
 
             view.setOnClickListener {
                 val action =
-                    CharacterDetailFragmentDirections.actionCharacterDetailFragmentToEpisodeDetailFragment()
+                    CharacterDetailFragmentDirections.actionCharacterDetailFragmentToEpisodeDetailFragment(episode)
                 findNavController().navigate(action)
             }
         }

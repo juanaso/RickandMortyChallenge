@@ -115,4 +115,12 @@ abstract class BaseUITest {
         navigateToCharacterDetailScreen(positionToClick)
         Espresso.onView(ViewMatchers.withId(R.id.characterDetailOrigin)).perform(ViewActions.click())
     }
+
+    fun navigateToEpisodeDetail(){
+        navigateToCharacterDetailScreen()
+        Espresso.onView(ViewMatchers.withId(R.id.episodesContainerTitle)).perform(ViewActions.click())
+        Thread.sleep(1000)
+        Espresso.onView(nthChildOfLinear(ViewMatchers.withId(R.id.episodesContainer), 2)).perform(ViewActions.click())
+
+    }
 }

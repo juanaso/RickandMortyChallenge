@@ -49,5 +49,10 @@
             android:id="@+id/episodeDetailFragment"
             android:name="com.juanasoapp.rickandmortychallenge.episodedetail.ui.EpisodeDetailFragment"
             android:label="EpisodeDetailFragment"
-            tools:layout="@layout/fragment_episode_detail"/>
+            tools:layout="@layout/fragment_episode_detail">
+        <argument
+                android:name="currentEpisode"
+                app:argType="com.juanasoapp.rickandmortychallenge.characterdetail.model.Episode"
+                app:nullable="false" />
+    </fragment>
 </navigation>
