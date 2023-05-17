@@ -54,5 +54,8 @@
                 android:name="currentEpisode"
                 app:argType="com.juanasoapp.rickandmortychallenge.characterdetail.model.Episode"
                 app:nullable="false" />
+        <action
+                android:id="@+id/action_episodeDetailFragment_to_characterDetailFragment"
+                app:destination="@id/characterDetailFragment" />
     </fragment>
 </navigation>
