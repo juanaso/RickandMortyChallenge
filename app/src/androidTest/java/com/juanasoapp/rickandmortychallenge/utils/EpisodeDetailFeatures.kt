@@ -18,6 +18,6 @@ class EpisodeDetailFeatures: BaseUITest() {
     @Test
     fun displayResidents(){
         navigateToEpisodeDetail()
-        BaristaRecyclerViewAssertions.assertRecyclerViewItemCount(R.id.episodeDetailCharacterRecycler, 9)
+        BaristaRecyclerViewAssertions.assertRecyclerViewItemCount(R.id.episodeDetailCharacterRecycler, 19)
     }
 }
