@@ -1,4 +1,4 @@
-package com.juanasoapp.rickandmortychallenge.characterDetail
+package com.juanasoapp.rickandmortychallenge.characterdetail
 
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.Episode
 import com.juanasoapp.rickandmortychallenge.utils.BaseUnitTest

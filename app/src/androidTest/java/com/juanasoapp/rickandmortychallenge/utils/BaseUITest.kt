@@ -116,11 +116,11 @@ abstract class BaseUITest {
         Espresso.onView(ViewMatchers.withId(R.id.characterDetailOrigin)).perform(ViewActions.click())
     }
 
-    fun navigateToEpisodeDetail(){
-        navigateToCharacterDetailScreen()
+    fun navigateToEpisodeDetail(characterPositionToClick: Int = 0, episodePositionToClick: Int = 2){
+        navigateToCharacterDetailScreen(characterPositionToClick)
         Espresso.onView(ViewMatchers.withId(R.id.episodesContainerTitle)).perform(ViewActions.click())
         Thread.sleep(1000)
-        Espresso.onView(nthChildOfLinear(ViewMatchers.withId(R.id.episodesContainer), 2)).perform(ViewActions.click())
+        Espresso.onView(nthChildOfLinear(ViewMatchers.withId(R.id.episodesContainer), episodePositionToClick)).perform(ViewActions.click())
 
     }
 }

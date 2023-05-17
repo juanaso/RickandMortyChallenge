@@ -1,4 +1,4 @@
-package com.juanasoapp.rickandmortychallenge.characterDetail
+package com.juanasoapp.rickandmortychallenge.characterdetail
 
 import com.juanasoapp.rickandmortychallenge.characterdetail.api.EpisodesRepository
 import com.juanasoapp.rickandmortychallenge.characterdetail.model.Episode
