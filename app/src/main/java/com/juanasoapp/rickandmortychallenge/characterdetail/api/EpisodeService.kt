@@ -28,6 +28,8 @@ class EpisodeService @Inject constructor(var api: RickAndMortyAPI, var mapper: U
             var responseRaw = api.fetchSingleEpisodes(dataProsesed)
             var response = EpisodesResponse().apply { addAll(listOf(responseRaw))}
             emit(Result.success(response))
+        }.catch {
+            emit(Result.failure(RuntimeException(backendExceptionErrorMessage)))
         }
     }
 }

@@ -61,8 +61,13 @@ class EpisodesServiceShould : BaseUnitTest() {
             backendExceptionErrorMessage,
             service.fetchEpisodes(episodesRaw).first().exceptionOrNull()?.message
         )
-    }
 
+        Assert.assertEquals(
+            backendExceptionErrorMessage,
+            service.fetchSingleEpisode(episodesRaw).first().exceptionOrNull()?.message
+        )
+    }
+    @ExperimentalCoroutinesApi
     @Test
     fun delegateCastingToMapper() = runBlockingTest {
         runBlocking {
@@ -94,6 +99,7 @@ class EpisodesServiceShould : BaseUnitTest() {
         runBlocking {
             whenever(mapper.invoke(any())).thenReturn(episodesMapped)
             whenever(api.fetchEpisodes(episodesMapped)).thenThrow(RuntimeException(backendExceptionErrorMessage))
+            whenever(api.fetchSingleEpisodes(episodesMapped)).thenThrow(RuntimeException(backendExceptionErrorMessage))
         }
         service = EpisodeService(api, mapper)
     }
