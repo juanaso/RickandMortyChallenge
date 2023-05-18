@@ -97,12 +97,14 @@ class CharacterListFragment : Fragment() {
 
     var onQueryTextListener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
+            genericAdapter?.listItems?.clear()
             viewModel.onTextSet(query ?: "")
             return false
         }
 
         override fun onQueryTextChange(newText: String?): Boolean {
             if (newText?.isNotEmpty() == true) {
+                genericAdapter?.listItems?.clear()
                 viewModel.onTextSet(newText)
             }
             return false

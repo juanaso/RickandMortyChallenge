@@ -14,7 +14,11 @@ abstract class GenericAdapter<T>(var listItems: ArrayList<T>, var layoutId: Int,
     fun setItems(newItems: ArrayList<T>) {
         val oldSize = listItems.size
         listItems = newItems
-        notifyItemRangeInserted(oldSize, newItems.size)
+        if (oldSize>0) {
+            notifyItemRangeInserted(oldSize, newItems.size)
+        }else{
+            notifyDataSetChanged()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
