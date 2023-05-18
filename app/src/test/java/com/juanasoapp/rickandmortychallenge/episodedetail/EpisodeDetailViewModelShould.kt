@@ -53,6 +53,15 @@ class EpisodeDetailViewModelShould:BaseUnitTest() {
         assertNull(viewModel.currentCharacters.value)
     }
 
+    @ExperimentalCoroutinesApi
+    @Test
+    fun notCallCharactersWhenCurrentCharactersAlreadyAssigned() = runBlockingTest {
+        mockSuccessfulCase()
+        viewModel.currentCharacters.value = characterResponse
+        viewModel.getCharacters()
+        verify(repository, times(0)).getDefinedCharacters(charactersRaw)
+    }
+
     private fun mockFailureCase() {
         runBlocking {
             whenever(repository.getDefinedCharacters(any())).thenReturn(

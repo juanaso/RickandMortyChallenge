@@ -17,10 +17,12 @@ class EpisodeDetailViewModel @Inject constructor(val repository: CharacterListRe
     val currentCharacters = MutableLiveData<DefinedCharacterResponse>()
 
     fun getCharacters() {
-        charactersRaw?.let { episodesRaw ->
-            viewModelScope.launch {
-                repository.getDefinedCharacters(episodesRaw).collect{
-                    currentCharacters.value = it.getOrNull()
+        if (currentCharacters.value.isNullOrEmpty()) {
+            charactersRaw?.let { episodesRaw ->
+                viewModelScope.launch {
+                    repository.getDefinedCharacters(episodesRaw).collect{
+                        currentCharacters.value = it.getOrNull()
+                    }
                 }
             }
         }

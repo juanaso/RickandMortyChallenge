@@ -79,11 +79,12 @@
                     android:paddingTop="20dp"
                     android:clipToPadding="false"
                     android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/locationDetailResidents"
                     tools:layoutManager="StaggeredGridLayoutManager"
                     tools:listitem="@layout/character_list_item"
-                    tools:itemCount="9"
+                    tools:itemCount="19"
                     app:spanCount="3"
                     />
 
