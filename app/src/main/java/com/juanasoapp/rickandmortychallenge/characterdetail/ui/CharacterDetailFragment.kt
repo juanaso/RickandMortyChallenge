@@ -63,7 +63,7 @@ class CharacterDetailFragment : Fragment() {
 
     private fun setUpObservers() {
         viewModel.episodes.observe(this as LifecycleOwner) { episodes ->
-            createEpisodesViewer(episodesMapper(episodes))
+            episodes?.let { createEpisodesViewer(episodesMapper(episodes)) }
         }
 
         viewModel.isLoadingEpisodes.observe(this as LifecycleOwner) { isLoading ->
@@ -139,7 +139,7 @@ class CharacterDetailFragment : Fragment() {
         binding.episodesContainer.layoutParams = layoutParams
     }
 
-    private fun addViewToEpisodesContainer(layoutId: Int, text: String, episode: Episode?=null) {
+    private fun addViewToEpisodesContainer(layoutId: Int, text: String, episode: Episode? = null) {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(layoutId, null)
         view.findViewById<TextView>(R.id.description).text = text

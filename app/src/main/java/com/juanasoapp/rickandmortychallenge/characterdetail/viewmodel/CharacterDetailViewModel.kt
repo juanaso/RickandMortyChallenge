@@ -24,7 +24,6 @@ class CharacterDetailViewModel @Inject constructor(private val repository: Episo
                     repository.getEpisodes(it).collect {
                         isLoadingEpisodes.value = false
                         episodes.value = it.getOrNull()
-
                     }
                 }
             }
