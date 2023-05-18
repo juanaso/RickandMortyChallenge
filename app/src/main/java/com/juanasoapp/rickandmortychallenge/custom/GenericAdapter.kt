@@ -12,8 +12,9 @@ abstract class GenericAdapter<T>(var listItems: ArrayList<T>, var layoutId: Int,
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun setItems(newItems: ArrayList<T>) {
-        listItems=newItems
-        notifyDataSetChanged()
+        val oldSize = listItems.size
+        listItems = newItems
+        notifyItemRangeInserted(oldSize, newItems.size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -24,7 +25,7 @@ abstract class GenericAdapter<T>(var listItems: ArrayList<T>, var layoutId: Int,
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as Binder<T>).bind(listItems[position])
-        if (position == listItems.size - minimumAmountToReload){
+        if (position == listItems.size - minimumAmountToReload) {
             onLoadMoreItems()
         }
     }
@@ -37,7 +38,7 @@ abstract class GenericAdapter<T>(var listItems: ArrayList<T>, var layoutId: Int,
         return layoutId
     }
 
-    open fun onLoadMoreItems(){}
+    open fun onLoadMoreItems() {}
 
     abstract fun getViewHolder(
         viewDataBinding: ViewDataBinding

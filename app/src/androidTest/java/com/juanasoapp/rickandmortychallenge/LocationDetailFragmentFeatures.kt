@@ -5,7 +5,6 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.juanasoapp.rickandmortychallenge.utils.BaseUITest
 import com.schibsted.spain.barista.assertion.BaristaRecyclerViewAssertions
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.hamcrest.CoreMatchers
 import org.junit.Test

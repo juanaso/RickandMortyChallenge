@@ -1,6 +1,5 @@
 package com.juanasoapp.rickandmortychallenge.locationdetail.ui
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

@@ -65,9 +65,9 @@ class CharacterListFragment : Fragment() {
             }
 
             override fun getViewHolder(viewDataBinding: ViewDataBinding): RecyclerView.ViewHolder {
-                return CharacterViewHolder(viewDataBinding as CharacterListItemBinding) { currentCharacyer,currentBitmap ->
+                return CharacterViewHolder(viewDataBinding as CharacterListItemBinding) { currentCharacter,currentBitmap ->
                     val action =
-                        CharacterListFragmentDirections.actionCharacterListFragmentToCharacterDetailFragment(currentCharacyer,currentBitmap)
+                        CharacterListFragmentDirections.actionCharacterListFragmentToCharacterDetailFragment(currentCharacter,currentBitmap)
                     findNavController().navigate(action)
                 }
             }

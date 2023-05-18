@@ -23,8 +23,6 @@ import com.juanasoapp.rickandmortychallenge.custom.SpacesItemDecoration
 import com.juanasoapp.rickandmortychallenge.databinding.CharacterListItemBinding
 import com.juanasoapp.rickandmortychallenge.databinding.FragmentEpisodeDetailBinding
 import com.juanasoapp.rickandmortychallenge.episodedetail.viewmodel.EpisodeDetailViewModel
-import com.juanasoapp.rickandmortychallenge.locationdetail.ui.LocationDetailFragmentDirections
-import com.juanasoapp.rickandmortychallenge.locationdetail.viewmodel.LocationDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
