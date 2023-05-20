@@ -27,7 +27,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
+
+    flavorDimensions "tier"
+
+    productFlavors {
+        dev {
+            buildConfigField "boolean", "IS_QA_FLAVOR", "false"
+
+        }
+        qa {
+            buildConfigField "boolean", "IS_QA_FLAVOR", "true"
+        }
+    }
+        compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
